@@ -1,0 +1,38 @@
+{
+  "selection_rule": "best silhouette among k=3..8 on TRAIN; k=9 and k=10 are comparison-only",
+  "selected_k": 5,
+  "results": [
+    {
+      "k": 3,
+      "train_silhouette": 0.12757,
+      "inertia": 2.0106,
+      "test_silhouette": null
+    },
+    {
+      "k": 4,
+      "train_silhouette": 0.171147,
+      "inertia": 0.985,
+      "test_silhouette": null
+    },
+    {
+      "k": 5,
+      "train_silhouette": 0.280449,
+      "inertia": 0.0176,
+      "test_silhouette": null
+    },
+    {
+      "k": 9,
+      "train_silhouette": null,
+      "inertia": null,
+      "test_silhouette": null,
+      "status": "unavailable: fewer than 10 training rows"
+    },
+    {
+      "k": 10,
+      "train_silhouette": null,
+      "inertia": null,
+      "test_silhouette": null,
+      "status": "unavailable: fewer than 11 training rows"
+    }
+  ]
+}

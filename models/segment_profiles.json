@@ -1,0 +1,142 @@
+[
+  {
+    "segment_id": 0,
+    "segment_label": "Segment 0: let know, let, know",
+    "editable_label": "Segment 0: let know, let, know",
+    "n_emails": 1853,
+    "keywords": [
+      "let know",
+      "let",
+      "know",
+      "thanks",
+      "know questions",
+      "need",
+      "questions",
+      "attached",
+      "like",
+      "just",
+      "know thanks",
+      "want"
+    ],
+    "sample_emails": [
+      "As far as I can discern from my limited due diligence, the Bridgeline interests have not been pledged or encumbered by Enron and it does not appear that they have been directly affected by the Bankruptcy.\nLet me know if anything else needs to be rundown quickly.\nJordan",
+      "In cleaning up e:mails, I ran across this one that I had not yet read.\nHas  James called and talke with you about Enpower?\nAre his concerns in the memo  accurate?\nLet me know.\n--Sally",
+      "Are any of you still holding posted journal entries from Jan. Close?\nIf so  will you please let me know what companies they are.\nThis will be an FYI  kind of thing for me incase any of the accountants come around looking for  specific entries.\nThanks for your cooperation.\ndd"
+    ],
+    "common_greeting": "hi",
+    "common_signoff": "thanks",
+    "formality": "formal"
+  },
+  {
+    "segment_id": 1,
+    "segment_label": "Segment 1: just, hope, going",
+    "editable_label": "Segment 1: just, hope, going",
+    "n_emails": 2070,
+    "keywords": [
+      "just",
+      "hope",
+      "going",
+      "good",
+      "time",
+      "know",
+      "think",
+      "great",
+      "don",
+      "work",
+      "ll",
+      "like"
+    ],
+    "sample_emails": [
+      "Here's a thought that didn't occur to me when I marked up the mock trial  script.\nShould we have the consultants prominantly feature \"IPEC  Busters\"???\nUnless we are pretty sure the judge will keep it out on  relevance grounds, it might be useful to at least get some juror reactions to  it.\nWith or without the specific IPEC Busters stuff, we probably ought to  assume that Jad's theme will be that Northern's whole philosophy was to  breach contracts without flinching if it served our commercial interests.\nThe vitriol from P&P and the other producers plays into that theme.\nMaybe we  ought to spice that part of the script up a bit also just so we can see how  our response plays.\nDF",
+      "\"It is the spirit which can bear things, not simply with resignation, but with blazing hope; it is not the spirit which sits statically enduring in the one place, but the spirit which bears things because it knows that these things are leading to a goal of glory; it is not the patience which grimly waits for the end, but the patience which radiantly hopes for the dawn.\nIt has been called \"masculine constancy under trial.\"\nIt has been said that always it has a background witch is courage...\nIt is the quality which keeps a man on his feet with his face to the wind.\nIt is the virtue which can transmute the hardest trial into glory because beyond the pain it sees the goal.\"\nWilliam Barclay",
+      "Moses, Jesus and an old man are golfing.\nMoses steps up to the tee and hits the ball.\nIt goes sailing over the fairway and lands in a water trap.\nMoses walks down, parts the water and chips the ball onto the green.\nJesus steps up to the tee and hits the ball.\nIt goes sailing over the fairway and lands in the water trap.\nJesus just walks on the water and chips the ball onto the green.\nThe old man steps up to the tee and hits the ball.\nIt goes sailing over the fairway and heads for the water trap.\nBut just before it  falls into the water, a fish jumps up and grabs the ball in its mouth.\nAs the fish is falling back down into the water, an eagle swoops down  and grabs the fish in its claws.\nThe eagle flies over the green, where  a lightning bolt shoots from the sky and barely misses it.\nStartled,  the eagle drops the fish.\nWhen the fish hits the ground, the ball  pops out of its mouth and rolls into the hole for a hole-in-one.\nJesus turns to the old man and says, \"Dad, if you don't stop fooling around, we won't bring you next time.\""
+    ],
+    "common_greeting": "hey",
+    "common_signoff": "thanks",
+    "formality": "conversational"
+  },
+  {
+    "segment_id": 2,
+    "segment_label": "Segment 2: agreement, master, attached",
+    "editable_label": "Segment 2: agreement, master, attached",
+    "n_emails": 1800,
+    "keywords": [
+      "agreement",
+      "master",
+      "attached",
+      "draft",
+      "isda",
+      "review",
+      "credit",
+      "form",
+      "thanks",
+      "comments",
+      "ena",
+      "sara"
+    ],
+    "sample_emails": [
+      "Richard Sanders and I talked with Elizabeth (an attorney with AEP).\nShe was  not sure that their was a question that needed to be answered.\nRichard  opined that the question may have related to the effect on HPL if it lost the  Taub lawsuit.\nThis suit relates to an alleged violation of the surface  rights agreement (Collateral Agreement) which was entered into with certain  surface owners after the Unit Agreement was signed.\nRichard explained that  if HPL lost the suit, it would lose its rights to maintain a pipeline and  well facilities on the property subject to the lawsuit.\nIn that event HPL  would have to either locate its pipeline around the property or  use its  condemnation rights to acquire an easement across the property.\nBecause the  Collateral Agreement relates to surface rights, losing those rights would not  affect HPL's rights under the Unit Agreement and thus the Taubs would not  have the right to drill a well to produce the gas that HPL has in storage.",
+      "Jim:  I have not seen any Enron Corp./CSFB agreements.\nENA has two different agreements with CSFB:  (1)  ISDA dated4/21/93.\nThis had:  NY law, submission to non-exclusive  jurisdiction of NY courts/waiver of objections to venue, limitation of  liability  (2)  Futures Agreement dated 9/21/00.\nThis had:  NY law, arbitration,  limitation of liability",
+      "FYI - Shari Stack is negotiating the brokerage agreement with Banc One and  there seems to be an issue over the interest rate.\nNeedless to say, I have  never had any conversations with Banc One over this issue.\nSS"
+    ],
+    "common_greeting": "hi",
+    "common_signoff": "thanks",
+    "formality": "formal"
+  },
+  {
+    "segment_id": 3,
+    "segment_label": "Segment 3: gas, deal, power",
+    "editable_label": "Segment 3: gas, deal, power",
+    "n_emails": 2174,
+    "keywords": [
+      "gas",
+      "deal",
+      "power",
+      "deals",
+      "contract",
+      "price",
+      "new",
+      "energy",
+      "market",
+      "capacity",
+      "thanks",
+      "day"
+    ],
+    "sample_emails": [
+      "AT APPROXIMATELY 22:00 10-23-01 A U - HAUL RENTAL TRUCK WAS FOUND IN NEWARK SUB STATION.\nSUB IS LOCATED  20 MILES EAST OF COLUMBUS OHIO.\nIT IS 69- 4 KV WITH SIX DISTRUBITION FEEDERS SERVING 3795 CUSTOMERS.\nTHE TRUCK   HAD CRASHED THROUGH THE GATE AND KNOCKED OVER A METERING PEDESTAL.\nA BRICK HAD BEEN WEDGED TO HOLD   THE GAS PETAL DOWN .\nLOCAL AUTHORITIES WERE ADVISED, AND THE INVESTIGATION IS ONGOING.\nNO OUTAGES WERE  EXPERIENCED.",
+      "Your REGION   Geographical Boundary:   Fuel Sources  (Pipelines, Terminals, NG/FO2/FO6 storage, Rivers): ?\nCoal:  (conversion factor, supply source) ?\nNG:   (pipelines, basis to Henry Hub) ?\nFO2/FO6:  (conversion factor, supply source, correlation to CL)   Load Mix: ?\nResidential / Commercial ?\nIndustrial   Stack: ?\nNuke (tot.\nmw and % of tot.\nstack, marginal load/cost) ?\nCoal (same as above) ?\nNG (same as above) ?\nFO2/FO6 (same as above) ?\nHydro   Historical Outage Cycles: ?\nNuke, Coal, NG, FO2/FO6   Seasonal Interchange: ?\nImport (avg.\ndaily mw and where) ?\nExport (same as above)   Top 5 Largest Utilities/Operators: ?\nService Territory (within this region) ?\nStack ?\nLoad Mix   Top 5 Largest Merchant Generators: ?\nPlant Locations/types   Attach historical load and MWDaily price sheet as last page for most actively traded hub in this region",
+      "Split out deal # 388136.1 BPA NW Delivered;  27 flat to BPA busbar, 4 flat to Hot Springs, 5 flat to TCL System, 20 flat to EWEB System.\nLeft remainder at NW Del.\nds"
+    ],
+    "common_greeting": "good morning",
+    "common_signoff": "thanks",
+    "formality": "conversational"
+  },
+  {
+    "segment_id": 4,
+    "segment_label": "Segment 4: thanks, meeting, information",
+    "editable_label": "Segment 4: thanks, meeting, information",
+    "n_emails": 5433,
+    "keywords": [
+      "thanks",
+      "meeting",
+      "information",
+      "attached",
+      "time",
+      "thank",
+      "need",
+      "like",
+      "contact",
+      "new",
+      "mail",
+      "questions"
+    ],
+    "sample_emails": [
+      "Hei Geir!\nVi ?nsker dere en riktig GOD JUL og et GODT NYTT?R!\nH?per det st?r bra til med dere.\nHvordan g?r det forresten med jobben - ?\nVi har jo f?tt med oss litt i nyhetene om Enron....  Vi h?per at dere snart kommer til Norge igjen, og at vi kan f?\nsjansen til ?\ntreffes - enten i Sande eller p?\nStovner hos Bj?rn.\nSom du sikkert har h?rt har jo pappa g?tt bort, og det har v?rt en del ?\nordne av praktiske ting i denne forbindelsen, men ellers baker og steller vi til jul s?\ngodt vi kan.....  Kristin kommer til Norge til fredag, h?rte jeg av faren din i g?r, og de pr?ver ?\nf?\ntatt en tur utover til oss i l?pet av den helgen, slik at vi kan f?\n?nsket hverandre god jul.\nDet gleder vi oss til!\nDet er alt for sjelden vi treffes.\nHils til Crystal, Henriette skulle gjerne snakket litt engelsk med henne igjen.....",
+      "Piotr,  Dziekuje za wiadomosc.\nBede prawdopodobnie w Londynie w koncu wrzesnia.\nCiesze sie, ze wszystko idzie  pomyslnie.\nOdezwij sie, jesli bedziesz przyjezdzal do Stanow.\nRozmawialem ostatnio z Twoim kolega, Avi Hauser.\nWicek",
+      ".\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734.\nPortfolio Statement (12/00) acct.\nNo.\n2201734\t  \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t \t .\nPortfolio Statement (11/00) acct.\nNo.\n2201723"
+    ],
+    "common_greeting": "hi",
+    "common_signoff": "thanks",
+    "formality": "formal"
+  }
+]

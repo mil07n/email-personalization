@@ -1,0 +1,13 @@
+name,profile,segment_id,segment_label,top_similarity_score,topics_extracted,personalized_topic_mentions,segment_only_topic_mentions
+Ava,"I manage gas pipeline nominations, daily flows, and transport capacity.",3,"Segment 3: gas, deal, power",0.8178,3,3,0
+Ben,I trade power and natural gas and monitor basis risk across regional hubs.,3,"Segment 3: gas, deal, power",0.8423,3,3,0
+Cara,"I review ISDA agreements, credit terms, and energy trading contracts.",2,"Segment 2: agreement, master, attached",0.6373,3,3,0
+Dev,I coordinate legal review of purchase agreements and commercial schedules.,2,"Segment 2: agreement, master, attached",0.5796,3,3,0
+Eli,"I lead recruiting, employee relations, and HR planning for the operations team.",4,"Segment 4: thanks, meeting, information",0.671,3,3,0
+Faye,"I schedule executive meetings, circulate minutes, and track action items.",4,"Segment 4: thanks, meeting, information",0.668,3,3,0
+Gus,"I arrange client travel, flights, hotels, and itineraries for business meetings.",4,"Segment 4: thanks, meeting, information",0.6423,3,3,0
+Hana,"I prepare monthly finance reports, budgets, and cash-flow forecasts.",4,"Segment 4: thanks, meeting, information",0.7458,3,3,0
+Ivan,"I manage utility settlements, invoices, and daily energy market reconciliations.",3,"Segment 3: gas, deal, power",0.787,3,3,0
+Jules,"I negotiate procurement terms, vendor pricing, and delivery commitments.",4,"Segment 4: thanks, meeting, information",0.6956,3,3,0
+Kira,"I handle client accounts, sales proposals, and commercial negotiations.",4,"Segment 4: thanks, meeting, information",0.6128,3,3,0
+Luca,"I oversee plant maintenance schedules, outage planning, and field operations.",4,"Segment 4: thanks, meeting, information",0.6038,3,3,0
