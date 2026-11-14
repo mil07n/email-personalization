@@ -1,0 +1,128 @@
+{
+  "enron": {
+    "status": "SUCCESS",
+    "name": "Enron Email Dataset (AESLC Corpus)",
+    "source": "https://www.cs.cmu.edu/~enron/ / AESLC",
+    "raw_path": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\enron\\raw\\AESLC-master\\enron_subject_line",
+    "processed_file": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\enron\\processed\\aeslc.csv",
+    "num_records": 16746,
+    "columns": [
+      "email_id",
+      "body",
+      "subject_line",
+      "split",
+      "clean",
+      "tokens"
+    ],
+    "file_size_bytes": 29451956,
+    "sample": {
+      "email_id": "train/allen-p_inbox_20",
+      "body": "Greg/Phillip,  Attached is the Grande Communications Service Agreement.\r\nThe bus",
+      "subject_line": "Service Agreement",
+      "split": "train",
+      "clean": "greg phillip attached grande communications service agreement business points ex",
+      "tokens": "['greg', 'phillip', 'attached', 'grande', 'communications', 'service', 'agreemen"
+    },
+    "description": "Real-world corporate email corpus with full email bodies and subject lines."
+  },
+  "customer_care": {
+    "status": "SUCCESS",
+    "name": "Customer Care Emails",
+    "source": "https://www.kaggle.com/datasets/rtweera/customer-care-emails / Hugging Face rtweera/customer_care_emails",
+    "raw_path": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\customer_care\\raw\\dataset.csv",
+    "processed_file": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\customer_care\\processed\\customer_care_emails.csv",
+    "num_records": 2259,
+    "columns": [
+      "subject",
+      "sender",
+      "receiver",
+      "timestamp",
+      "message_body",
+      "thread_id",
+      "email_types",
+      "email_status",
+      "email_criticality",
+      "product_types",
+      "agent_effectivity",
+      "agent_efficiency",
+      "customer_satisfaction"
+    ],
+    "file_size_bytes": 1505981,
+    "sample": {
+      "subject": "Mercury Language Documentation Issue",
+      "sender": "john.doe@example.com",
+      "receiver": "support@aetheros.com",
+      "timestamp": "2023-10-26 10:02:34+00:00",
+      "message_body": "Hi Aetheros Support,\n\nI'm having trouble finding clear documentation on how to i",
+      "thread_id": "aa001-8e561ac9-8523-421f-9d05-e4c2a80a26d7",
+      "email_types": "['inquiry']",
+      "email_status": "ongoing",
+      "email_criticality": "low",
+      "product_types": "['Mercury Language']",
+      "agent_effectivity": "high",
+      "agent_efficiency": "very low",
+      "customer_satisfaction": "0.9043"
+    },
+    "description": "Customer care support conversations with category, email_criticality, and thread structure."
+  },
+  "email_thread_summary": {
+    "status": "SUCCESS",
+    "name": "Email Thread Summary",
+    "source": "https://huggingface.co/datasets/sidhq/email-thread-summary",
+    "raw_path": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\email_thread_summary\\raw",
+    "processed_file": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\email_thread_summary\\processed\\email_thread_summary.csv",
+    "num_records": 4167,
+    "columns": [
+      "thread",
+      "summary"
+    ],
+    "file_size_bytes": 47507726,
+    "sample": {
+      "thread": "{'subject': '\"Other Agreements\" in Lotus Notes', 'messages': array([{'timestamp'",
+      "summary": "Tana Jones requests access to the \"Other Agreements\" information in the Financia"
+    },
+    "description": "Multi-message email threads paired with human-written summaries."
+  },
+  "epa": {
+    "status": "SUCCESS",
+    "name": "EPA Dataset (Enron People Assignment for Task Intent)",
+    "source": "https://github.com/RevRameshkumar/EPADataset (EMNLP 2018 W-NUT / Microsoft Research)",
+    "raw_path": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\epa\\raw\\EPADataset.tsv",
+    "processed_file": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\epa\\processed\\epa_tasks.csv",
+    "num_records": 6734,
+    "columns": [
+      "Key",
+      "Json"
+    ],
+    "file_size_bytes": 17118245,
+    "sample": {
+      "Key": "EPA-00000",
+      "Json": "{\"EmailID\": \"d7ZnSLcWHfdM9p97euzNkA==\", \"Subject\": \"Power DB Field Requirements\""
+    },
+    "description": "Annotated email sentences mapping task intents to assigned people/addressees."
+  },
+  "emailsum": {
+    "status": "SUCCESS",
+    "name": "EmailSum Dataset",
+    "source": "https://github.com/ZhangShiyue/EmailSum (ACL 2021)",
+    "raw_path": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\emailsum\\raw\\EmailSum_data.json",
+    "processed_file": "C:\\Users\\tejai\\OneDrive\\Desktop\\AESLC-Pipeline\\datasets\\emailsum\\processed\\emailsum.csv",
+    "num_records": 2549,
+    "columns": [
+      "thread_id",
+      "num_of_emails",
+      "short_summary",
+      "long_summary",
+      "split"
+    ],
+    "file_size_bytes": 1503800,
+    "sample": {
+      "thread_id": "285",
+      "num_of_emails": "4",
+      "short_summary": "{'annotator_id': 5, 'content': \"John provides team list of ideas for the year's ",
+      "long_summary": "{'annotator_id': 5, 'content': \"John provides the team a list of idea's for the ",
+      "split": "train"
+    },
+    "description": "Multi-turn email conversation summarization dataset from ACL 2021."
+  }
+}

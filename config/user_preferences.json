@@ -1,0 +1,26 @@
+{
+  "user_name": "Executive User",
+  "user_role": "Director / Executive",
+  "important_senders": [
+    "ceo@company.com",
+    "board@company.com",
+    "legal@company.com",
+    "vp@company.com",
+    "cto@company.com",
+    "Alice Johnson",
+    "John Smith"
+  ],
+  "priority_topics": [
+    "contract",
+    "budget",
+    "outage",
+    "security",
+    "compliance",
+    "deadline",
+    "pipeline",
+    "quarterly"
+  ],
+  "min_urgency_to_highlight": "MEDIUM",
+  "summary_format": "executive_briefing",
+  "max_summary_items": 10
+}

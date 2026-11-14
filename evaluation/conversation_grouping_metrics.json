@@ -1,0 +1,8 @@
+{
+  "dataset": "Customer Care Emails (Ground Truth: thread_id)",
+  "sample_size": 400,
+  "true_threads": 120,
+  "predicted_conversations": 96,
+  "adjusted_rand_index": 0.2773,
+  "normalized_mutual_info": 0.8174
+}

@@ -1,0 +1,38 @@
+{
+  "email_thread_summary": {
+    "samples_evaluated": 150,
+    "rouge1": {
+      "precision": 0.1318,
+      "recall": 0.4452,
+      "f1": 0.1956
+    },
+    "rouge2": {
+      "precision": 0.0422,
+      "recall": 0.1468,
+      "f1": 0.063
+    },
+    "rougeL": {
+      "precision": 0.0756,
+      "recall": 0.2622,
+      "f1": 0.1124
+    }
+  },
+  "emailsum": {
+    "samples_evaluated": 150,
+    "rouge1": {
+      "precision": 0.3333,
+      "recall": 0.0339,
+      "f1": 0.0614
+    },
+    "rouge2": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "rougeL": {
+      "precision": 0.3333,
+      "recall": 0.0339,
+      "f1": 0.0614
+    }
+  }
+}
