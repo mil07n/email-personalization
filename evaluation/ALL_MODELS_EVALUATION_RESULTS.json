@@ -1,0 +1,424 @@
+{
+  "report_metadata": {
+    "title": "NLP-Powered Executive Email Assistant - All Models Evaluation & Benchmark Results",
+    "generated_at": "2026-11-17T19:23:42.828453",
+    "pipeline_version": "2.0.0",
+    "total_datasets_used": 5,
+    "total_models_evaluated": 6
+  },
+  "datasets_summary": {
+    "enron": {
+      "records": 16746,
+      "file_size_bytes": 29451956,
+      "source": "https://www.cs.cmu.edu/~enron/ / AESLC",
+      "description": "Real-world corporate email corpus with full email bodies and subject lines."
+    },
+    "customer_care": {
+      "records": 2259,
+      "file_size_bytes": 1505981,
+      "source": "https://www.kaggle.com/datasets/rtweera/customer-care-emails / Hugging Face rtweera/customer_care_emails",
+      "description": "Customer care support conversations with category, email_criticality, and thread structure."
+    },
+    "email_thread_summary": {
+      "records": 4167,
+      "file_size_bytes": 47507726,
+      "source": "https://huggingface.co/datasets/sidhq/email-thread-summary",
+      "description": "Multi-message email threads paired with human-written summaries."
+    },
+    "epa": {
+      "records": 6734,
+      "file_size_bytes": 17118245,
+      "source": "https://github.com/RevRameshkumar/EPADataset (EMNLP 2018 W-NUT / Microsoft Research)",
+      "description": "Annotated email sentences mapping task intents to assigned people/addressees."
+    },
+    "emailsum": {
+      "records": 2549,
+      "file_size_bytes": 1503800,
+      "source": "https://github.com/ZhangShiyue/EmailSum (ACL 2021)",
+      "description": "Multi-turn email conversation summarization dataset from ACL 2021."
+    }
+  },
+  "models": {
+    "1_urgency_classification": {
+      "task": "Classify incoming emails into High, Medium, or Low priority/criticality",
+      "dataset": "Customer Care Emails (2,259 emails with criticality labels)",
+      "winning_model": "Ensemble (LinearSVC + LogReg)",
+      "winning_accuracy": 0.9049,
+      "winning_macro_f1": 0.8968,
+      "all_algorithms_evaluated": {
+        "Ensemble (LinearSVC + LogReg)": {
+          "accuracy": 0.9071,
+          "precision_macro": 0.8991,
+          "recall_macro": 0.8989,
+          "f1_macro": 0.8986,
+          "f1_weighted": 0.9066,
+          "confusion_matrix": {
+            "labels": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "matrix": [
+              [
+                120,
+                12,
+                0
+              ],
+              [
+                17,
+                109,
+                7
+              ],
+              [
+                1,
+                5,
+                181
+              ]
+            ]
+          },
+          "per_class": {
+            "low": {
+              "precision": 0.8696,
+              "recall": 0.9091,
+              "f1": 0.8889,
+              "support": 132.0
+            },
+            "medium": {
+              "precision": 0.8651,
+              "recall": 0.8195,
+              "f1": 0.8417,
+              "support": 133.0
+            },
+            "high": {
+              "precision": 0.9628,
+              "recall": 0.9679,
+              "f1": 0.9653,
+              "support": 187.0
+            }
+          }
+        },
+        "LinearSVC": {
+          "accuracy": 0.9049,
+          "precision_macro": 0.8968,
+          "recall_macro": 0.897,
+          "f1_macro": 0.8968,
+          "f1_weighted": 0.9047,
+          "confusion_matrix": {
+            "labels": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "matrix": [
+              [
+                119,
+                13,
+                0
+              ],
+              [
+                16,
+                110,
+                7
+              ],
+              [
+                1,
+                6,
+                180
+              ]
+            ]
+          },
+          "per_class": {
+            "low": {
+              "precision": 0.875,
+              "recall": 0.9015,
+              "f1": 0.8881,
+              "support": 132.0
+            },
+            "medium": {
+              "precision": 0.8527,
+              "recall": 0.8271,
+              "f1": 0.8397,
+              "support": 133.0
+            },
+            "high": {
+              "precision": 0.9626,
+              "recall": 0.9626,
+              "f1": 0.9626,
+              "support": 187.0
+            }
+          }
+        },
+        "LogisticRegression": {
+          "accuracy": 0.8894,
+          "precision_macro": 0.8815,
+          "recall_macro": 0.8824,
+          "f1_macro": 0.8814,
+          "f1_weighted": 0.8892,
+          "confusion_matrix": {
+            "labels": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "matrix": [
+              [
+                119,
+                12,
+                1
+              ],
+              [
+                18,
+                107,
+                8
+              ],
+              [
+                4,
+                7,
+                176
+              ]
+            ]
+          },
+          "per_class": {
+            "low": {
+              "precision": 0.844,
+              "recall": 0.9015,
+              "f1": 0.8718,
+              "support": 132.0
+            },
+            "medium": {
+              "precision": 0.8492,
+              "recall": 0.8045,
+              "f1": 0.8263,
+              "support": 133.0
+            },
+            "high": {
+              "precision": 0.9514,
+              "recall": 0.9412,
+              "f1": 0.9462,
+              "support": 187.0
+            }
+          }
+        },
+        "MultinomialNB": {
+          "accuracy": 0.8496,
+          "precision_macro": 0.8455,
+          "recall_macro": 0.838,
+          "f1_macro": 0.8369,
+          "f1_weighted": 0.847,
+          "confusion_matrix": {
+            "labels": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "matrix": [
+              [
+                118,
+                12,
+                2
+              ],
+              [
+                26,
+                91,
+                16
+              ],
+              [
+                9,
+                3,
+                175
+              ]
+            ]
+          },
+          "per_class": {
+            "low": {
+              "precision": 0.7712,
+              "recall": 0.8939,
+              "f1": 0.8281,
+              "support": 132.0
+            },
+            "medium": {
+              "precision": 0.8585,
+              "recall": 0.6842,
+              "f1": 0.7615,
+              "support": 133.0
+            },
+            "high": {
+              "precision": 0.9067,
+              "recall": 0.9358,
+              "f1": 0.9211,
+              "support": 187.0
+            }
+          }
+        }
+      }
+    },
+    "2_action_item_extraction": {
+      "task": "Identify task-related sentences and assign the responsible person / addressee",
+      "dataset": "EPA Dataset (Microsoft Research / EMNLP 2018 W-NUT, 6,734 annotations)",
+      "metrics": {
+        "dataset": "EPA Dataset (Enron People Assignment for Task Intent)",
+        "sample_size": 300,
+        "precision": 0.9333,
+        "recall": 0.9466,
+        "f1_score": 0.9399,
+        "addressee_accuracy": 0.7419,
+        "true_positives": 266,
+        "false_positives": 19,
+        "false_negatives": 15
+      }
+    },
+    "3_conversation_grouping": {
+      "task": "Cluster multi-message email conversations using semantic TF-IDF and subject normalization",
+      "dataset": "Customer Care Emails (ground-truth thread IDs)",
+      "metrics": {
+        "dataset": "Customer Care Emails (Ground Truth: thread_id)",
+        "sample_size": 400,
+        "true_threads": 120,
+        "predicted_conversations": 96,
+        "adjusted_rand_index": 0.2773,
+        "normalized_mutual_info": 0.8174
+      }
+    },
+    "4_email_thread_summarization": {
+      "task": "Generate concise extractive summaries from long single emails and multi-turn threads",
+      "datasets": "Email Thread Summary (4,167 threads) & EmailSum (2,549 threads)",
+      "metrics": {
+        "email_thread_summary": {
+          "samples_evaluated": 150,
+          "rouge1": {
+            "precision": 0.1318,
+            "recall": 0.4452,
+            "f1": 0.1956
+          },
+          "rouge2": {
+            "precision": 0.0422,
+            "recall": 0.1468,
+            "f1": 0.063
+          },
+          "rougeL": {
+            "precision": 0.0756,
+            "recall": 0.2622,
+            "f1": 0.1124
+          }
+        },
+        "emailsum": {
+          "samples_evaluated": 150,
+          "rouge1": {
+            "precision": 0.3333,
+            "recall": 0.0339,
+            "f1": 0.0614
+          },
+          "rouge2": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "rougeL": {
+            "precision": 0.3333,
+            "recall": 0.0339,
+            "f1": 0.0614
+          }
+        }
+      }
+    },
+    "5_category_and_spam_classification": {
+      "task": "Multi-category classification (SPAM, URGENT, ACTION_REQUIRED, MEETING, FINANCE, NEWSLETTER, SOCIAL, GENERAL)",
+      "categories_supported": 8,
+      "spam_detection": "Lexical heuristics + anti-phishing rule signals"
+    },
+    "6_live_pipeline_integration_samples": [
+      {
+        "test_id": "sample_1_urgent",
+        "subject": "CRITICAL: Production API Outage and Payment Gateway Failure",
+        "sender": "cto@company.com",
+        "predicted_urgency": "CRITICAL",
+        "urgency_confidence": 0.95,
+        "predicted_category": "OPERATIONS",
+        "category_confidence": 0.4,
+        "extracted_action_items": [
+          {
+            "id": "task_1",
+            "action": "Investigate immediately and fix the server configuration by 3 pm today",
+            "responsible_person": "John",
+            "deadline": "today",
+            "normalized_deadline": "2026-11-17 17:00",
+            "priority": "HIGH",
+            "status": "pending",
+            "completed": false,
+            "confidence": 0.9,
+            "source_sentence": "John, please investigate immediately and fix the server configuration by 3 PM today."
+          }
+        ],
+        "extracted_deadlines": [
+          {
+            "raw": "today",
+            "type": "relative",
+            "normalized": "2026-11-17 17:00",
+            "start": 200,
+            "end": 205
+          },
+          {
+            "raw": "immediately",
+            "type": "relative",
+            "normalized": "2026-11-17 (Immediate)",
+            "start": 147,
+            "end": 158
+          },
+          {
+            "raw": "by 3 PM",
+            "type": "time",
+            "normalized": "by 3 PM",
+            "start": 192,
+            "end": 199
+          }
+        ],
+        "generated_summary": "The payment gateway is offline and customers cannot checkout. John, please investigate immediately and fix the server configuration by 3 PM today."
+      },
+      {
+        "test_id": "sample_2_finance",
+        "subject": "Invoice #4829 Overdue - Immediate Payment Required",
+        "sender": "billing@vendor.com",
+        "predicted_urgency": "CRITICAL",
+        "urgency_confidence": 0.95,
+        "predicted_category": "FINANCE",
+        "category_confidence": 0.5,
+        "extracted_action_items": [
+          {
+            "id": "task_1",
+            "action": "Find attached the overdue invoice for q3 software licenses",
+            "responsible_person": "Finance Team",
+            "deadline": "No deadline specified",
+            "normalized_deadline": null,
+            "priority": "HIGH",
+            "status": "pending",
+            "completed": false,
+            "confidence": 0.9,
+            "source_sentence": "Dear Finance Team, please find attached the overdue invoice for Q3 software licenses."
+          }
+        ],
+        "extracted_deadlines": [
+          {
+            "raw": "before Friday",
+            "type": "relative",
+            "normalized": "2026-11-20 (Friday)",
+            "start": 167,
+            "end": 180
+          }
+        ],
+        "generated_summary": "Dear Finance Team, please find attached the overdue invoice for Q3 software licenses. The payment of $12,400 is due before Friday."
+      },
+      {
+        "test_id": "sample_3_newsletter",
+        "subject": "Weekly Tech Digest & Community Highlights",
+        "sender": "newsletter@techworld.com",
+        "predicted_urgency": "HIGH",
+        "urgency_confidence": 0.457,
+        "predicted_category": "SPAM",
+        "category_confidence": 0.5,
+        "extracted_action_items": [],
+        "extracted_deadlines": [],
+        "generated_summary": "Here is your weekly summary of industry news and updates. Click here to read the full blog post or unsubscribe if you no longer wish to receive these updates."
+      }
+    ]
+  }
+}

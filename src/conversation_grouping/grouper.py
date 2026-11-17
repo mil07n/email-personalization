@@ -122,16 +122,27 @@ class ConversationGrouper:
             assigned[i] = cluster_id
             current_members = [i]
 
+            sender_i = str(emails[i].get("sender", "")).lower().strip()
+            receiver_i = str(emails[i].get("receiver", "")).lower().strip()
+            parts_i = {sender_i, receiver_i} - {"", "unknown"}
+
             for j in range(i + 1, n):
                 if assigned[j] != -1:
                     continue
 
-                # Match condition 1: Identical cleaned subject (e.g. "Re: Meeting" and "Meeting")
+                sender_j = str(emails[j].get("sender", "")).lower().strip()
+                receiver_j = str(emails[j].get("receiver", "")).lower().strip()
+                parts_j = {sender_j, receiver_j} - {"", "unknown"}
+
+                # Participant overlap
+                has_participant_overlap = bool(parts_i & parts_j) if (parts_i and parts_j) else True
+
+                # Match condition 1: Identical cleaned subject with participant or content coherence
                 same_subject = (norm_subjects[i] == norm_subjects[j]) and len(norm_subjects[i]) > 3
-                # Match condition 2: High TF-IDF body similarity (> 0.40)
+                # Match condition 2: High TF-IDF body similarity (> 0.35)
                 high_similarity = sim_mat[i, j] >= self.similarity_threshold
 
-                if same_subject or high_similarity:
+                if (same_subject and has_participant_overlap) or (same_subject and high_similarity) or (high_similarity and has_participant_overlap):
                     assigned[j] = cluster_id
                     current_members.append(j)
 

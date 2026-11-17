@@ -166,15 +166,27 @@ class ActionExtractor:
 
                     # Extract deadline specifically associated with this sentence
                     sentence_deadlines = self.deadline_extractor.extract_deadlines(sent)
-                    deadline_str = sentence_deadlines[0]["raw"] if sentence_deadlines else None
+                    deadline_raw = sentence_deadlines[0]["raw"] if sentence_deadlines else None
+                    deadline_norm = sentence_deadlines[0].get("normalized") or sentence_deadlines[0].get("normalized_date") if sentence_deadlines else None
 
-                    # Extract responsible person
+                    # Extract responsible person (defaults to recipient or 'Me')
                     person = self.extract_person_for_sentence(sent, default_person)
+                    if not person or person.lower() in ("me", "unassigned"):
+                        person = recipient_name or "Me"
+
+                    # Action priority
+                    is_urgent_task = any(w in sent_lower for w in ["urgent", "asap", "immediately", "today", "tomorrow", "critical", "blocking"])
+                    task_priority = "HIGH" if (best_conf >= 0.88 or is_urgent_task) else "NORMAL"
 
                     action_items.append({
+                        "id": f"task_{len(action_items)+1}",
                         "action": action_formatted,
-                        "responsible_person": person or "Unassigned",
-                        "deadline": deadline_str or "No deadline specified",
+                        "responsible_person": person,
+                        "deadline": deadline_raw or "No deadline specified",
+                        "normalized_deadline": deadline_norm,
+                        "priority": task_priority,
+                        "status": "pending",
+                        "completed": False,
                         "confidence": round(best_conf, 2),
                         "source_sentence": sent.strip()
                     })

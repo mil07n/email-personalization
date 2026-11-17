@@ -11,6 +11,7 @@ from typing import List, Dict, Any, Optional
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 from src.preprocessing.preprocessor import EmailPreprocessor
 
@@ -18,8 +19,20 @@ from src.preprocessing.preprocessor import EmailPreprocessor
 class EmailSummarizer:
     """
     Extractive multi-turn conversation and thread summarizer.
-    Scores sentences by information density, key decisions, requests, and positional weight.
+    Incorporates noise/boilerplate stripping, Maximal Marginal Relevance (MMR)
+    for diverse sentence selection, and structured Executive 3-Part Briefing.
     """
+
+    # Boilerplate patterns to strip
+    SIGNATURE_PATTERNS = [
+        r"(?i)\n\s*--+\s*\n.*$",
+        r"(?i)\n\s*(?:best|warm|kind|regards|sincerely|thanks|thank you|cheers)[,\s].*$",
+        r"(?i)\bSent from my (?:iPhone|iPad|Android|Galaxy|mobile device)\b.*$",
+        r"(?i)\bSent from (?:Mail|Outlook) for Windows\b.*$",
+        r"(?i)-----Original Message-----.*$",
+        r"(?i)\n\s*On\s+.+wrote:\s*\n.*$",
+        r"(?i)This e-?mail (?:is confidential|and any attachments|message is intended).*$",
+    ]
 
     # Cue phrases signaling important decisions or actions
     DECISION_CUES = [
@@ -32,6 +45,13 @@ class EmailSummarizer:
     def __init__(self, preprocessor: Optional[EmailPreprocessor] = None):
         self.preprocessor = preprocessor or EmailPreprocessor()
 
+    def strip_boilerplate(self, text: str) -> str:
+        """Strip signatures, quoted chains, and confidentiality disclaimers."""
+        cleaned = text or ""
+        for pat in self.SIGNATURE_PATTERNS:
+            cleaned = re.sub(pat, "", cleaned, flags=re.DOTALL | re.MULTILINE)
+        return cleaned.strip()
+
     def summarize_thread(
         self,
         messages: List[Dict[str, Any]],
@@ -43,6 +63,11 @@ class EmailSummarizer:
         Returns:
             {
                 "summary": "...",
+                "executive_brief": {
+                    "tldr": "...",
+                    "key_decision": "...",
+                    "next_steps": "..."
+                },
                 "key_points": ["...", "..."],
                 "action_items": ["..."],
                 "participants": ["..."]
@@ -51,12 +76,17 @@ class EmailSummarizer:
         if not messages:
             return {
                 "summary": "No messages in conversation.",
+                "executive_brief": {
+                    "tldr": "No messages to summarize.",
+                    "key_decision": "None",
+                    "next_steps": "None"
+                },
                 "key_points": [],
                 "action_items": [],
                 "participants": []
             }
 
-        # Collect and clean message bodies
+        # Collect and clean message bodies with boilerplate stripping
         all_sentences = []
         participants = []
 
@@ -66,7 +96,8 @@ class EmailSummarizer:
                 participants.append(sender)
 
             body = msg.get("body") or msg.get("message_body") or ""
-            cleaned_body = self.preprocessor.clean_for_nlp(body)
+            stripped_body = self.strip_boilerplate(body)
+            cleaned_body = self.preprocessor.clean_for_nlp(stripped_body)
             sents = self.preprocessor.tokenize_sentences(cleaned_body)
 
             for s_idx, sent in enumerate(sents):
@@ -83,6 +114,11 @@ class EmailSummarizer:
         if not all_sentences:
             return {
                 "summary": "Empty conversation content.",
+                "executive_brief": {
+                    "tldr": "No significant email body text found.",
+                    "key_decision": "None",
+                    "next_steps": "None"
+                },
                 "key_points": [],
                 "action_items": [],
                 "participants": participants
@@ -92,6 +128,11 @@ class EmailSummarizer:
             summary_text = " ".join(s["text"] for s in all_sentences)
             return {
                 "summary": summary_text,
+                "executive_brief": {
+                    "tldr": all_sentences[0]["text"] if all_sentences else summary_text,
+                    "key_decision": all_sentences[-1]["text"] if len(all_sentences) > 1 else "Reviewed.",
+                    "next_steps": "Follow up on conversation."
+                },
                 "key_points": [s["text"] for s in all_sentences],
                 "action_items": [],
                 "participants": participants
@@ -102,46 +143,92 @@ class EmailSummarizer:
         vectorizer = TfidfVectorizer(max_features=1000, stop_words="english")
         try:
             tfidf_matrix = vectorizer.fit_transform(sentence_texts)
-            # Sum of TF-IDF values for words in sentence
             base_scores = np.asarray(tfidf_matrix.sum(axis=1)).ravel()
         except Exception:
             base_scores = np.ones(len(sentence_texts))
+            tfidf_matrix = None
 
         # Adjust scores by position and cue phrases
-        final_scores = []
+        final_scores = np.zeros(len(all_sentences))
         for i, s in enumerate(all_sentences):
             score = float(base_scores[i])
 
-            # Positional weight: first message intro and last message outcome are crucial
             if s["is_first_msg"] and s["sent_idx"] == 0:
-                score *= 1.40  # problem statement / opening request
+                score *= 1.40  # Problem statement / opening request
             if s["is_last_msg"]:
-                score *= 1.30  # resolution / latest status
+                score *= 1.30  # Latest status / resolution
 
-            # Decision cue boost
             text_lower = s["text"].lower()
             for cue in self.DECISION_CUES:
                 if re.search(cue, text_lower):
                     score *= 1.50
                     break
 
-            final_scores.append(score)
+            final_scores[i] = score
 
-        # Select top max_sentences maintaining chronological order
-        top_indices = sorted(np.argsort(final_scores)[-max_sentences:])
+        # Maximal Marginal Relevance (MMR) selection
+        selected_indices = []
+        if tfidf_matrix is not None and len(all_sentences) > max_sentences:
+            sim_matrix = cosine_similarity(tfidf_matrix)
+            candidates = list(range(len(all_sentences)))
+            lambda_param = 0.65  # Trade-off between relevance and diversity
+
+            # Pick highest scoring first sentence
+            best_first = int(np.argmax(final_scores))
+            selected_indices.append(best_first)
+            candidates.remove(best_first)
+
+            while len(selected_indices) < max_sentences and candidates:
+                mmr_scores = []
+                for c in candidates:
+                    rel = final_scores[c]
+                    max_sim = max(sim_matrix[c, s] for s in selected_indices)
+                    mmr = lambda_param * rel - (1 - lambda_param) * max_sim
+                    mmr_scores.append((mmr, c))
+
+                mmr_scores.sort(reverse=True)
+                best_c = mmr_scores[0][1]
+                selected_indices.append(best_c)
+                candidates.remove(best_c)
+
+            top_indices = sorted(selected_indices)
+        else:
+            top_indices = sorted(np.argsort(final_scores)[-max_sentences:])
+
         selected_sentences = [all_sentences[idx]["text"] for idx in top_indices]
-
         summary_text = " ".join(selected_sentences)
+
+        # Extract structured executive 3-part elements
+        tldr = selected_sentences[0] if selected_sentences else "Overview of message."
+        
+        # Decision point
+        decision_sent = next(
+            (s for s in selected_sentences if any(re.search(c, s.lower()) for c in self.DECISION_CUES)),
+            selected_sentences[1] if len(selected_sentences) > 1 else tldr
+        )
+
+        # Next steps
+        next_step_sent = next(
+            (s for s in selected_sentences if any(w in s.lower() for w in ["please", "need", "ensure", "submit", "approve", "review", "schedule"])),
+            selected_sentences[-1] if len(selected_sentences) > 2 else "No pending actions required."
+        )
+
         return {
             "summary": summary_text,
+            "executive_brief": {
+                "tldr": tldr,
+                "key_decision": decision_sent,
+                "next_steps": next_step_sent
+            },
             "key_points": selected_sentences,
             "action_items": [s for s in selected_sentences if any(w in s.lower() for w in ["please", "need", "should", "will", "deadline"])],
             "participants": participants
         }
 
-    def summarize_single(self, text: str, max_sentences: int = 3) -> str:
-        """Summarize a single email body."""
-        return self.summarize_thread([{"body": text}], max_sentences=max_sentences)["summary"]
+    def summarize_single(self, text: str, max_sentences: int = 3) -> Dict[str, Any]:
+        """Summarize a single email body with structured brief."""
+        res = self.summarize_thread([{"body": text}], max_sentences=max_sentences)
+        return res
 
     @staticmethod
     def _get_ngrams(tokens: List[str], n: int) -> List[tuple]:

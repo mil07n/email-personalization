@@ -1,5 +1,5 @@
 {
-  "best_model": "LinearSVC",
+  "best_model": "Ensemble (LinearSVC + LogReg)",
   "dataset": "Customer Care Emails (rtweera/customer-care-emails)",
   "train_samples": 1807,
   "test_samples": 452,
@@ -9,12 +9,12 @@
     "high"
   ],
   "models": {
-    "LogisticRegression": {
-      "accuracy": 0.8164,
-      "precision_macro": 0.8036,
-      "recall_macro": 0.8009,
-      "f1_macro": 0.8009,
-      "f1_weighted": 0.8135,
+    "Ensemble (LinearSVC + LogReg)": {
+      "accuracy": 0.9071,
+      "precision_macro": 0.8991,
+      "recall_macro": 0.8989,
+      "f1_macro": 0.8986,
+      "f1_weighted": 0.9066,
       "confusion_matrix": {
         "labels": [
           "low",
@@ -23,49 +23,49 @@
         ],
         "matrix": [
           [
-            107,
-            21,
-            4
+            120,
+            12,
+            0
           ],
           [
-            26,
-            88,
-            19
+            17,
+            109,
+            7
           ],
           [
+            1,
             5,
-            8,
-            174
+            181
           ]
         ]
       },
       "per_class": {
         "low": {
-          "precision": 0.7754,
-          "recall": 0.8106,
-          "f1": 0.7926,
+          "precision": 0.8696,
+          "recall": 0.9091,
+          "f1": 0.8889,
           "support": 132.0
         },
         "medium": {
-          "precision": 0.7521,
-          "recall": 0.6617,
-          "f1": 0.704,
+          "precision": 0.8651,
+          "recall": 0.8195,
+          "f1": 0.8417,
           "support": 133.0
         },
         "high": {
-          "precision": 0.8832,
-          "recall": 0.9305,
-          "f1": 0.9062,
+          "precision": 0.9628,
+          "recall": 0.9679,
+          "f1": 0.9653,
           "support": 187.0
         }
       }
     },
     "LinearSVC": {
-      "accuracy": 0.8363,
-      "precision_macro": 0.8244,
-      "recall_macro": 0.8242,
-      "f1_macro": 0.8242,
-      "f1_weighted": 0.8357,
+      "accuracy": 0.9049,
+      "precision_macro": 0.8968,
+      "recall_macro": 0.897,
+      "f1_macro": 0.8968,
+      "f1_weighted": 0.9047,
       "confusion_matrix": {
         "labels": [
           "low",
@@ -74,49 +74,100 @@
         ],
         "matrix": [
           [
-            108,
-            22,
-            2
+            119,
+            13,
+            0
           ],
           [
-            22,
-            97,
-            14
+            16,
+            110,
+            7
           ],
           [
-            5,
-            9,
-            173
+            1,
+            6,
+            180
           ]
         ]
       },
       "per_class": {
         "low": {
-          "precision": 0.8,
-          "recall": 0.8182,
-          "f1": 0.809,
+          "precision": 0.875,
+          "recall": 0.9015,
+          "f1": 0.8881,
           "support": 132.0
         },
         "medium": {
-          "precision": 0.7578,
-          "recall": 0.7293,
-          "f1": 0.7433,
+          "precision": 0.8527,
+          "recall": 0.8271,
+          "f1": 0.8397,
           "support": 133.0
         },
         "high": {
-          "precision": 0.9153,
-          "recall": 0.9251,
-          "f1": 0.9202,
+          "precision": 0.9626,
+          "recall": 0.9626,
+          "f1": 0.9626,
+          "support": 187.0
+        }
+      }
+    },
+    "LogisticRegression": {
+      "accuracy": 0.8894,
+      "precision_macro": 0.8815,
+      "recall_macro": 0.8824,
+      "f1_macro": 0.8814,
+      "f1_weighted": 0.8892,
+      "confusion_matrix": {
+        "labels": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "matrix": [
+          [
+            119,
+            12,
+            1
+          ],
+          [
+            18,
+            107,
+            8
+          ],
+          [
+            4,
+            7,
+            176
+          ]
+        ]
+      },
+      "per_class": {
+        "low": {
+          "precision": 0.844,
+          "recall": 0.9015,
+          "f1": 0.8718,
+          "support": 132.0
+        },
+        "medium": {
+          "precision": 0.8492,
+          "recall": 0.8045,
+          "f1": 0.8263,
+          "support": 133.0
+        },
+        "high": {
+          "precision": 0.9514,
+          "recall": 0.9412,
+          "f1": 0.9462,
           "support": 187.0
         }
       }
     },
     "MultinomialNB": {
-      "accuracy": 0.7478,
-      "precision_macro": 0.7315,
-      "recall_macro": 0.7246,
-      "f1_macro": 0.7173,
-      "f1_weighted": 0.7343,
+      "accuracy": 0.8496,
+      "precision_macro": 0.8455,
+      "recall_macro": 0.838,
+      "f1_macro": 0.8369,
+      "f1_weighted": 0.847,
       "confusion_matrix": {
         "labels": [
           "low",
@@ -125,39 +176,39 @@
         ],
         "matrix": [
           [
-            106,
-            21,
-            5
+            118,
+            12,
+            2
           ],
           [
-            37,
-            60,
-            36
+            26,
+            91,
+            16
           ],
           [
             9,
-            6,
-            172
+            3,
+            175
           ]
         ]
       },
       "per_class": {
         "low": {
-          "precision": 0.6974,
-          "recall": 0.803,
-          "f1": 0.7465,
+          "precision": 0.7712,
+          "recall": 0.8939,
+          "f1": 0.8281,
           "support": 132.0
         },
         "medium": {
-          "precision": 0.6897,
-          "recall": 0.4511,
-          "f1": 0.5455,
+          "precision": 0.8585,
+          "recall": 0.6842,
+          "f1": 0.7615,
           "support": 133.0
         },
         "high": {
-          "precision": 0.8075,
-          "recall": 0.9198,
-          "f1": 0.86,
+          "precision": 0.9067,
+          "recall": 0.9358,
+          "f1": 0.9211,
           "support": 187.0
         }
       }

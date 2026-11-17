@@ -109,7 +109,7 @@ def get_system_stats():
         },
         "summarization_metrics": summarization_metrics,
         "capabilities": [
-            "TF-IDF + LinearSVC Urgency Classification (83.6% accuracy)",
+            "TF-IDF (1-3 ngrams) + Calibrated LinearSVC Urgency Classification (90.5% accuracy)",
             "EPA Intent Addressee Action Item Extraction",
             "Temporal Regex & ISO Date Normalization",
             "Jaccard & TF-IDF Semantic Conversation Grouping",
@@ -150,20 +150,22 @@ def analyze_single_email(email: EmailInput):
     Live NLP analysis of a single email.
     Evaluates urgency, extracts action items & deadlines, summarizes, and personalizes.
     """
+    global _active_inbox, _active_dashboard_cache
     try:
+        new_id = f"live_{len(_active_inbox)+1}"
         result = pipeline.analyze_email(
             subject=email.subject,
             body=email.body,
             sender=email.sender or "Unknown",
             receiver=email.receiver or "Me",
             timestamp=email.timestamp or "Just now",
-            thread_id=email.thread_id
+            thread_id=email.thread_id,
+            email_id=new_id
         )
 
         # Also append to active inbox so it appears immediately on Dashboard and Inbox!
-        global _active_inbox, _active_dashboard_cache
         _active_inbox.insert(0, {
-            "id": f"live_{len(_active_inbox)+1}",
+            "id": new_id,
             "subject": email.subject,
             "body": email.body,
             "sender": email.sender or "Unknown",
@@ -198,6 +200,7 @@ async def upload_email_file(file: UploadFile = File(...)):
     """
     Upload a .txt or .eml file and pass it through the live NLP pipeline.
     """
+    global _active_inbox, _active_dashboard_cache
     try:
         content_bytes = await file.read()
         raw_text = content_bytes.decode("utf-8", errors="replace")
@@ -208,17 +211,18 @@ async def upload_email_file(file: UploadFile = File(...)):
         body = meta["body"] or raw_text
         sender = meta["from"] or "uploaded_file"
 
+        new_id = f"upload_{len(_active_inbox)+1}"
         analyzed = pipeline.analyze_email(
             subject=subject,
             body=body,
             sender=sender,
-            timestamp="Uploaded Just Now"
+            timestamp="Uploaded Just Now",
+            email_id=new_id
         )
 
         # Add to inbox
-        global _active_inbox, _active_dashboard_cache
         _active_inbox.insert(0, {
-            "id": f"upload_{len(_active_inbox)+1}",
+            "id": new_id,
             "subject": subject,
             "body": body,
             "sender": sender,
@@ -263,6 +267,185 @@ def generate_fresh_daily_summary():
     """Explicitly regenerate the personalized daily executive summary."""
     dash = get_cached_dashboard()
     return dash.get("daily_summary", {})
+
+
+# ── Email Compose / AI Generate ───────────────────────────────────────────────
+
+@app.post("/api/compose")
+def compose_email(payload: dict):
+    """
+    Generate a personalized email draft from input parameters.
+    Supports free-form text input for email_purpose with dynamic composition.
+    """
+    recipient_name = payload.get("recipient_name", "").strip() or "Colleague"
+    recipient_role = payload.get("recipient_role", "").strip()
+    topic_keywords = payload.get("topic_keywords", "").strip()
+    email_purpose = payload.get("email_purpose", "").strip()
+    tone = (payload.get("tone", "") or "formal").lower().strip()
+    user_name = payload.get("user_name", "").strip() or "Executive"
+    additional_context = payload.get("additional_context", "").strip()
+
+    # Greeting style
+    if tone in ["casual", "informal"]:
+        greeting = f"Hey {recipient_name},"
+        closing = f"Best,\n{user_name}"
+    elif tone in ["friendly", "warm"]:
+        greeting = f"Hi {recipient_name},"
+        closing = f"Warm regards,\n{user_name}"
+    elif tone in ["urgent", "direct"]:
+        greeting = f"Attention {recipient_name},"
+        closing = f"Regards,\n{user_name}"
+    else:
+        greeting = f"Dear {recipient_name},"
+        closing = f"Sincerely,\n{user_name}"
+
+    role_ref = f" ({recipient_role})" if recipient_role else ""
+    keywords_text = ", ".join([k.strip() for k in topic_keywords.split(",") if k.strip()]) if topic_keywords else ""
+
+    # Dynamic Purpose Handling (supports free-form custom writing)
+    purpose_lower = email_purpose.lower()
+
+    if not email_purpose:
+        subject_line = f"Regarding {keywords_text.title() if keywords_text else 'Our Discussion'}"
+        body_core = (
+            f"I am writing to connect with you regarding {keywords_text or 'the matter at hand'}. "
+            f"Please let me know your thoughts or feedback at your earliest convenience."
+        )
+    elif any(w in purpose_lower for w in ["urgent", "escalat", "critical", "outage"]):
+        subject_line = f"URGENT: {keywords_text.title() if keywords_text else email_purpose[:50].title()}"
+        body_core = (
+            f"I am writing regarding {email_purpose}. "
+            f"{'In relation to ' + keywords_text + ', ' if keywords_text else ''}"
+            f"this matter is time-sensitive and requires your immediate attention and action."
+        )
+    elif any(w in purpose_lower for w in ["approv", "sign", "authoriz"]):
+        subject_line = f"Approval Required: {keywords_text.title() if keywords_text else email_purpose[:50].title()}"
+        body_core = (
+            f"I am writing to formally request your approval regarding {email_purpose}. "
+            f"{'Specifically concerning ' + keywords_text + ', ' if keywords_text else ''}"
+            f"please review the details and provide your authorization so we may proceed."
+        )
+    elif any(w in purpose_lower for w in ["meet", "sync", "schedule", "call"]):
+        subject_line = f"Meeting Request: {keywords_text.title() if keywords_text else email_purpose[:50].title()}"
+        body_core = (
+            f"I would like to schedule a time to discuss {email_purpose}. "
+            f"{'We will review ' + keywords_text + '. ' if keywords_text else ''}"
+            f"Please share your availability for a brief call this week."
+        )
+    elif any(w in purpose_lower for w in ["update", "status", "progress"]):
+        subject_line = f"Update: {keywords_text.title() if keywords_text else email_purpose[:50].title()}"
+        body_core = (
+            f"I am reaching out to provide an update regarding {email_purpose}. "
+            f"{'Key points concerning ' + keywords_text + ' are highlighted below. ' if keywords_text else ''}"
+            f"Please let me know if you have any questions or require additional details."
+        )
+    elif any(w in purpose_lower for w in ["thank", "appreciat", "gratitud"]):
+        subject_line = f"Thank You: {keywords_text.title() if keywords_text else email_purpose[:50].title()}"
+        body_core = (
+            f"I wanted to take a moment to express my sincere appreciation regarding {email_purpose}. "
+            f"{'Your efforts on ' + keywords_text + ' have been invaluable. ' if keywords_text else ''}"
+            f"Thank you for your continued dedication and collaboration."
+        )
+    else:
+        # General custom free-form purpose
+        subject_line = f"{email_purpose[:45].strip().title()}{(' - ' + keywords_text.title()) if keywords_text else ''}"
+        body_core = (
+            f"I am writing to you regarding {email_purpose}. "
+            f"{'In particular, regarding ' + keywords_text + ', ' if keywords_text else ''}"
+            f"please review this information and let me know how you would like to proceed."
+        )
+
+    context_para = f"\n\nAdditional Details:\n{additional_context}" if additional_context else ""
+
+    body = (
+        f"{greeting}\n\n"
+        f"{body_core}"
+        f"{context_para}\n\n"
+        f"{closing}"
+    )
+
+    return {"subject": subject_line, "body": body}
+
+
+# ── Live Email Delivery via Gmail SMTP ────────────────────────────────────────
+
+from src.email_sender.smtp_sender import send_email_via_smtp, load_smtp_credentials
+
+@app.get("/api/smtp/status")
+def get_smtp_status():
+    """Check if Gmail SMTP credentials are configured."""
+    creds = load_smtp_credentials()
+    return {
+        "configured": bool(creds.get("email") and creds.get("password")),
+        "email": creds.get("email", ""),
+        "host": creds.get("host", "smtp.gmail.com"),
+        "port": creds.get("port", 587)
+    }
+
+@app.post("/api/send")
+def send_email_endpoint(payload: dict):
+    """
+    Transmit an email directly to the destination address using Gmail SMTP.
+    Input:
+        to: recipient email address (e.g. user@gmail.com)
+        subject: email subject
+        body: email body
+        from_email: optional sender email
+        app_password: optional 16-character Google App Password
+        save_credentials: bool (if true, saves credentials to user preferences)
+    """
+    to_email = payload.get("to", "").strip()
+    subject = payload.get("subject", "").strip()
+    body = payload.get("body", "").strip()
+    from_email = payload.get("from_email", "").strip()
+    app_password = payload.get("app_password", "").strip()
+    save_creds = payload.get("save_credentials", False)
+
+    if not to_email:
+        raise HTTPException(status_code=400, detail="Recipient email ('to') is required.")
+
+    # Save credentials if requested
+    if save_creds and from_email and app_password:
+        pipeline.personalization_engine.update_preferences({
+            "smtp_settings": {
+                "email": from_email,
+                "app_password": app_password,
+                "host": "smtp.gmail.com",
+                "port": 587
+            }
+        })
+
+    try:
+        result = send_email_via_smtp(
+            to_email=to_email,
+            subject=subject,
+            body=body,
+            from_email=from_email or None,
+            app_password=app_password or None
+        )
+    except Exception as e:
+        result = {
+            "success": False,
+            "mode": "fallback_web",
+            "error": str(e),
+            "web_link": f"https://mail.google.com/mail/?view=cm&fs=1&to={to_email}&su={subject}&body={body}"
+        }
+
+    # Record the sent message into the active demonstration inbox
+    global _active_inbox, _active_dashboard_cache
+    sent_doc = {
+        "id": f"sent_{len(_active_inbox)+1}",
+        "subject": subject,
+        "body": body,
+        "sender": from_email or "Me",
+        "receiver": to_email,
+        "timestamp": "Just now",
+        "is_sent": True
+    }
+    _active_inbox.insert(0, sent_doc)
+    _active_dashboard_cache = pipeline.analyze_batch(_active_inbox)
+
+    return result
 
 
 # ── Frontend Static Files Mount ──────────────────────────────────────────────

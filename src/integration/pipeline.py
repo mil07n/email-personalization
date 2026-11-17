@@ -20,6 +20,7 @@ from src.deadline_extraction.extractor import DeadlineExtractor
 from src.conversation_grouping.grouper import ConversationGrouper
 from src.summarization.summarizer import EmailSummarizer
 from src.personalization.engine import PersonalizationEngine
+from src.urgency_classification.spam_classifier import EmailCategoryClassifier
 
 
 class EmailAnalysisPipeline:
@@ -35,6 +36,7 @@ class EmailAnalysisPipeline:
         self.grouper = ConversationGrouper()
         self.summarizer = EmailSummarizer(self.preprocessor)
         self.personalization_engine = PersonalizationEngine()
+        self.category_classifier = EmailCategoryClassifier()
 
     def analyze_email(
         self,
@@ -43,7 +45,8 @@ class EmailAnalysisPipeline:
         sender: str = "",
         receiver: str = "",
         timestamp: str = "",
-        thread_id: Optional[str] = None
+        thread_id: Optional[str] = None,
+        email_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Run full NLP analysis on a single incoming email.
@@ -65,14 +68,31 @@ class EmailAnalysisPipeline:
         # 3. Action items & addressee extraction
         action_items = self.action_extractor.extract(body, recipient_name=receiver)
 
-        # 4. Deadlines extraction
+        # 4. Deadlines extraction with task binding
         deadlines = self.deadline_extractor.extract_deadlines(f"{subject} {body}")
+        for d in deadlines:
+            d_raw = (d.get("raw") or "").lower()
+            matching_task = None
+            for act in action_items:
+                act_task = act.get("action", "")
+                act_dl = (act.get("deadline") or "").lower()
+                act_src = (act.get("source_sentence") or "").lower()
+                if d_raw and (d_raw in act_dl or act_dl in d_raw or d_raw in act_src):
+                    matching_task = act_task
+                    break
+            if not matching_task and action_items:
+                matching_task = action_items[0].get("action")
+            d["task"] = matching_task
 
-        # 5. Extractive summary
-        summary = self.summarizer.summarize_single(body, max_sentences=2)
+        # 5. Extractive summary & Executive 3-part brief
+        summary_result = self.summarizer.summarize_single(body, max_sentences=3)
+        summary_text = summary_result.get("summary", "") if isinstance(summary_result, dict) else str(summary_result)
+        executive_brief = summary_result.get("executive_brief", {}) if isinstance(summary_result, dict) else {}
 
-        # 6. Assembly
+        # 6. Assembly with guaranteed unique ID
+        assigned_id = email_id or f"msg_{abs(hash(f'{subject}_{body[:30]}_{timestamp}_{sender}')) % 1000000}"
         email_doc = {
+            "id": assigned_id,
             "subject": subject,
             "body": body,
             "sender": sender or "Unknown",
@@ -82,11 +102,17 @@ class EmailAnalysisPipeline:
             "urgency": urgency_result,
             "action_items": action_items,
             "deadlines": deadlines,
-            "summary": summary
+            "summary": summary_text,
+            "executive_brief": executive_brief
         }
 
         # 7. Apply personalization scoring
         personalized_doc = self.personalization_engine.personalize_email(email_doc)
+
+        # 8. Category & spam classification
+        category_result = self.category_classifier.classify(subject, body, sender)
+        personalized_doc["category"] = category_result
+
         return personalized_doc
 
     def analyze_batch(self, emails: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -114,7 +140,8 @@ class EmailAnalysisPipeline:
                 sender=em.get("sender", ""),
                 receiver=em.get("receiver", ""),
                 timestamp=em.get("timestamp", ""),
-                thread_id=em.get("thread_id")
+                thread_id=em.get("thread_id"),
+                email_id=em.get("id")
             )
             analyzed_emails.append(analyzed)
 
@@ -145,6 +172,7 @@ class EmailAnalysisPipeline:
             "high": sum(1 for e in analyzed_emails if e["urgency"]["priority"] == "HIGH"),
             "medium": sum(1 for e in analyzed_emails if e["urgency"]["priority"] == "MEDIUM"),
             "low": sum(1 for e in analyzed_emails if e["urgency"]["priority"] == "LOW"),
+            "spam": sum(1 for e in analyzed_emails if e.get("category", {}).get("category") == "SPAM"),
             "action_items": sum(len(e["action_items"]) for e in analyzed_emails),
             "deadlines": sum(len(e["deadlines"]) for e in analyzed_emails),
             "conversations_count": len(conversations)

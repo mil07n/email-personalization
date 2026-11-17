@@ -1,1091 +1,1713 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Executive Email Assistant – NLP Intelligence Suite</title>
-  <!-- Google Fonts: Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- React & ReactDOM -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <!-- Babel Standalone -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          },
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-              800: '#1e40af',
-              900: '#1e3a8a',
-              950: '#0f172a',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
-    .badge-critical { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-    .badge-high { background-color: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
-    .badge-medium { background-color: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
-    .badge-low { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MailMind AI — Executive Email Intelligence</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   CSS DESIGN SYSTEM — MAILMIND AI EXECUTIVE WORKSPACE
+   ═══════════════════════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font-sans:'Inter',system-ui,sans-serif;
+  --font-display:'Plus Jakarta Sans',system-ui,sans-serif;
+  --sidebar-w:260px;--list-w:360px;
+
+  /* Light theme */
+  --bg:#f5f5f7;--canvas:#ffffff;--surface:#ffffff;--surface2:#f9fafb;
+  --border:#e5e7eb;--border2:#f0f0f2;
+  --txt-primary:#111827;--txt-secondary:#6b7280;--txt-muted:#9ca3af;
+  --blue:#2563eb;--blue-lt:#dbeafe;--blue-dk:#1d4ed8;
+  --red:#dc2626;--red-lt:#fee2e2;
+  --orange:#d97706;--orange-lt:#fef3c7;
+  --green:#059669;--green-lt:#d1fae5;
+  --purple:#7c3aed;--purple-lt:#ede9fe;
+  --cyan:#0891b2;--cyan-lt:#cffafe;
+  --shadow-xs:0 1px 2px rgba(0,0,0,.05);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -2px rgba(0,0,0,.05);
+  --shadow-lg:0 10px 25px -5px rgba(0,0,0,.08),0 4px 10px -6px rgba(0,0,0,.05);
+  --shadow-xl:0 20px 40px -10px rgba(0,0,0,.12),0 8px 16px -8px rgba(0,0,0,.08);
+  --radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-xl:20px;--radius-pill:999px;
+  --transition:.18s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"]{
+  --bg:#0b0f19;--canvas:#111827;--surface:#111827;--surface2:#1a2234;
+  --border:#1f2937;--border2:#263044;
+  --txt-primary:#f9fafb;--txt-secondary:#9ca3af;--txt-muted:#6b7280;
+  --blue-lt:rgba(37,99,235,.18);
+  --shadow-xs:0 1px 2px rgba(0,0,0,.3);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4),0 1px 2px rgba(0,0,0,.2);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.4),0 2px 4px -2px rgba(0,0,0,.2);
+  --shadow-lg:0 10px 25px -5px rgba(0,0,0,.5),0 4px 10px -6px rgba(0,0,0,.3);
+}
+
+body{font-family:var(--font-sans);background:var(--bg);height:100vh;overflow:hidden;color:var(--txt-primary);-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ── AMBIENT RADIAL GLOWS ── */
+.glow-critical{box-shadow:0 0 0 1px #dc2626,0 0 20px rgba(220,38,38,.15)}
+.glow-high{box-shadow:0 0 0 1px #d97706,0 0 16px rgba(217,119,6,.12)}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;gap:12px;
+  padding:0 20px;height:60px;
+  background:var(--canvas);border-bottom:1px solid var(--border);
+  z-index:200;flex-shrink:0;
+}
+.logo{display:flex;align-items:center;gap:10px;min-width:220px}
+.logo-mark{
+  width:34px;height:34px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;
+  font-size:17px;box-shadow:0 4px 12px rgba(37,99,235,.3);flex-shrink:0;
+}
+.logo-name{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--txt-primary)}
+.logo-ai{
+  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  color:#fff;border-radius:4px;padding:2px 6px;
+}
+
+/* Search */
+.search-wrap{flex:1;position:relative;max-width:680px}
+.search-input{
+  width:100%;height:40px;border:1.5px solid var(--border);
+  background:var(--surface2);border-radius:var(--radius-pill);
+  padding:0 16px 0 42px;font-size:14px;font-family:var(--font-sans);
+  color:var(--txt-primary);outline:none;transition:var(--transition);
+}
+.search-input::placeholder{color:var(--txt-muted)}
+.search-input:focus{border-color:var(--blue);background:var(--canvas);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--txt-muted)}
+.search-kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--txt-muted);background:var(--border);border-radius:4px;padding:1px 6px;font-family:monospace}
+
+.topbar-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.icon-btn{
+  width:36px;height:36px;border:none;background:transparent;
+  border-radius:var(--radius-md);cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--txt-secondary);transition:var(--transition);
+}
+.icon-btn:hover{background:var(--surface2);color:var(--txt-primary)}
+.theme-toggle{font-size:17px}
+
+/* Status pill */
+.status-pill{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 12px;border-radius:var(--radius-pill);font-size:12px;font-weight:500;
+}
+.status-online{background:var(--green-lt);color:var(--green)}
+.status-offline{background:var(--red-lt);color:var(--red)}
+.pulse-dot{
+  width:7px;height:7px;border-radius:50%;background:currentColor;
+  animation:pulse-anim 2s ease-in-out infinite;
+}
+@keyframes pulse-anim{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+.avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#2563eb,#059669);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0;
+  font-family:var(--font-display);
+}
+
+/* ── BODY LAYOUT ── */
+.body-wrap{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:var(--canvas);overflow-y:auto;
+  border-right:1px solid var(--border);
+  padding:12px 0;display:flex;flex-direction:column;
+}
+.compose-btn{
+  display:flex;align-items:center;gap:10px;
+  margin:0 12px 16px;padding:12px 18px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  color:#fff;border:none;border-radius:var(--radius-lg);
+  cursor:pointer;font-size:14px;font-weight:600;font-family:var(--font-sans);
+  box-shadow:0 4px 14px rgba(37,99,235,.35);
+  transition:var(--transition);letter-spacing:-.01em;
+}
+.compose-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.45)}
+.compose-btn .c-icon{font-size:17px}
+
+.nav-label{
+  padding:8px 18px 4px;font-size:10.5px;font-weight:600;
+  color:var(--txt-muted);text-transform:uppercase;letter-spacing:.08em;
+}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:9px 18px;cursor:pointer;
+  border-radius:0 var(--radius-pill) var(--radius-pill) 0;
+  margin-right:12px;font-size:13.5px;color:var(--txt-secondary);
+  transition:var(--transition);position:relative;font-weight:500;
+}
+.nav-item:hover{background:var(--surface2);color:var(--txt-primary)}
+.nav-item.active{background:var(--blue-lt);color:var(--blue);font-weight:600}
+.nav-item .ni{font-size:17px;width:20px;text-align:center;flex-shrink:0}
+.nav-badge{
+  margin-left:auto;background:var(--txt-secondary);color:var(--canvas);
+  border-radius:var(--radius-pill);padding:1px 7px;font-size:10.5px;font-weight:600;
+}
+.nav-item.active .nav-badge{background:var(--blue);color:#fff}
+.nav-divider{height:1px;background:var(--border);margin:10px 18px}
+.sidebar-footer{margin-top:auto;padding:12px}
+
+/* ── EMAIL LIST ── */
+.email-list{
+  width:var(--list-w);flex-shrink:0;
+  display:flex;flex-direction:column;
+  border-right:1px solid var(--border);
+  background:var(--canvas);overflow:hidden;
+}
+.list-header{
+  display:flex;align-items:center;gap:8px;
+  padding:14px 18px 10px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.list-title{font-size:16px;font-weight:700;color:var(--txt-primary);font-family:var(--font-display)}
+.count-badge{
+  font-size:11px;color:var(--txt-muted);background:var(--surface2);
+  padding:2px 8px;border-radius:var(--radius-pill);font-weight:500;
+}
+.filter-tabs{display:flex;gap:4px;padding:8px 16px;border-bottom:1px solid var(--border2);overflow-x:auto;flex-shrink:0}
+.filter-tab{
+  padding:5px 13px;border-radius:var(--radius-pill);border:1.5px solid var(--border);
+  background:transparent;font-size:11.5px;cursor:pointer;color:var(--txt-secondary);
+  white-space:nowrap;transition:var(--transition);font-weight:500;font-family:var(--font-sans);
+}
+.filter-tab:hover{border-color:var(--blue);color:var(--blue)}
+.filter-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.email-items{overflow-y:auto;flex:1}
+
+/* Email Row */
+.email-row{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 16px;border-bottom:1px solid var(--border2);
+  cursor:pointer;transition:background var(--transition);position:relative;
+}
+.email-row:hover{background:var(--surface2)}
+.email-row.selected{background:var(--blue-lt)}
+.email-row.unread .row-sender,.email-row.unread .row-subject{font-weight:700;color:var(--txt-primary)}
+.prio-stripe{width:3px;border-radius:2px;flex-shrink:0;align-self:stretch;min-height:50px;margin-top:1px}
+.row-body{flex:1;min-width:0}
+.row-top{display:flex;justify-content:space-between;align-items:baseline;gap:6px;margin-bottom:2px}
+.row-sender{font-size:13.5px;color:var(--txt-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.row-time{font-size:11px;color:var(--txt-muted);flex-shrink:0}
+.row-subject{font-size:13.5px;color:var(--txt-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:3px}
+.row-snippet{font-size:12px;color:var(--txt-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:5px}
+.row-tags{display:flex;gap:4px;flex-wrap:wrap}
+.rtag{font-size:10px;padding:1.5px 7px;border-radius:var(--radius-pill);font-weight:600;letter-spacing:.02em}
+.rtag-critical{color:#dc2626;background:#fee2e2;border:1px solid #fca5a5}
+.rtag-high{color:#b45309;background:#fef3c7;border:1px solid #fcd34d}
+.rtag-medium{color:#2563eb;background:#dbeafe;border:1px solid #93c5fd}
+.rtag-low{color:#059669;background:#d1fae5;border:1px solid #6ee7b7}
+.rtag-cat{color:var(--txt-secondary);background:var(--surface2);border:1px solid var(--border)}
+.rtag-actions{color:var(--purple);background:var(--purple-lt);border:1px solid #c4b5fd}
+.rtag-deadline{color:var(--orange);background:var(--orange-lt);border:1px solid #fcd34d}
+
+/* ── READING PANE ── */
+.reading-pane{flex:1;overflow-y:auto;background:var(--bg);display:flex;flex-direction:column}
+.reading-pane.empty{align-items:center;justify-content:center;color:var(--txt-muted)}
+.reading-pane.empty .ei{font-size:56px;margin-bottom:16px;opacity:.35}
+.reading-pane.empty p{font-size:15px;font-weight:500}
+.reading-pane.empty .hint{font-size:12px;margin-top:6px;opacity:.7}
+
+.email-detail{padding:28px 36px 40px;max-width:860px;width:100%;margin:0 auto}
+.detail-subject{
+  font-size:22px;font-weight:700;color:var(--txt-primary);
+  font-family:var(--font-display);margin-bottom:14px;line-height:1.3;
+  letter-spacing:-.03em;
+}
+.detail-meta{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.meta-av{
+  width:42px;height:42px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#2563eb,#059669);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:16px;font-family:var(--font-display);
+}
+.meta-info{flex:1}
+.meta-from{font-size:14px;font-weight:600;color:var(--txt-primary)}
+.meta-to{font-size:12px;color:var(--txt-muted)}
+.meta-time{font-size:12px;color:var(--txt-muted);flex-shrink:0}
+
+/* Priority badge (reading pane) */
+.priority-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 12px;border-radius:var(--radius-pill);font-size:11px;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;
+}
+.pb-critical{background:var(--red-lt);color:var(--red)}
+.pb-high{background:var(--orange-lt);color:var(--orange)}
+.pb-medium{background:var(--blue-lt);color:var(--blue)}
+.pb-low{background:var(--green-lt);color:var(--green)}
+
+/* Animated critical pulse ring */
+.critical-ring{
+  display:inline-flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.critical-ring::before{
+  content:'';position:absolute;inset:-4px;border-radius:var(--radius-pill);
+  background:rgba(220,38,38,.15);animation:crit-pulse 1.8s ease-in-out infinite;
+}
+@keyframes crit-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.5}}
+
+.detail-actions{display:flex;gap:8px;margin:16px 0;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.d-btn{
+  display:flex;align-items:center;gap:6px;padding:7px 16px;
+  border-radius:var(--radius-pill);border:1.5px solid var(--border);
+  background:var(--canvas);cursor:pointer;font-size:13px;color:var(--txt-secondary);
+  transition:var(--transition);font-weight:500;font-family:var(--font-sans);
+}
+.d-btn:hover{background:var(--surface2);border-color:var(--blue);color:var(--blue);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.d-btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.d-btn.primary:hover{background:var(--blue-dk)}
+
+/* Smart reply chips */
+.smart-replies{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 20px}
+.smart-reply-chip{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:var(--radius-pill);
+  border:1.5px solid var(--border);background:var(--canvas);
+  cursor:pointer;font-size:12.5px;font-weight:500;color:var(--txt-secondary);
+  transition:var(--transition);font-family:var(--font-sans);
+}
+.smart-reply-chip:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+
+.email-body-text{
+  font-size:14px;line-height:1.75;color:var(--txt-primary);
+  white-space:pre-wrap;padding:20px 0 24px;
+}
+
+/* ── NLP ANALYSIS PANEL ── */
+.nlp-section{margin-top:4px;display:flex;flex-direction:column;gap:10px}
+.nlp-card{
+  border:1.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;
+  background:var(--canvas);transition:box-shadow var(--transition);
+}
+.nlp-card:hover{box-shadow:var(--shadow-sm)}
+.nlp-header{
+  display:flex;align-items:center;gap:10px;padding:11px 16px;
+  background:var(--surface2);cursor:pointer;border-bottom:1px solid var(--border);
+}
+.nlp-header h4{font-size:13px;font-weight:600;color:var(--txt-primary);flex:1;font-family:var(--font-display)}
+.nlp-header .chevron{color:var(--txt-muted);font-size:11px;transition:transform var(--transition)}
+.nlp-body{padding:14px 16px}
+
+/* Urgency confidence SVG gauge */
+.conf-gauge-wrap{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.conf-gauge{position:relative;width:64px;height:64px;flex-shrink:0}
+.gauge-svg{transform:rotate(-90deg)}
+.gauge-bg{fill:none;stroke:var(--border);stroke-width:5}
+.gauge-fill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dasharray 1s ease}
+.gauge-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.gauge-pct{font-size:14px;font-weight:700;color:var(--txt-primary);line-height:1}
+.gauge-sub{font-size:9px;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
+
+/* Signal breakdown */
+.signal-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border2)}
+.signal-row:last-child{border-bottom:none}
+.signal-name{flex:1;font-size:12px;color:var(--txt-secondary)}
+.signal-weight{font-size:11px;font-weight:700;padding:1px 8px;border-radius:var(--radius-pill)}
+.signal-pos{background:var(--green-lt);color:var(--green)}
+.signal-neg{background:var(--red-lt);color:var(--red)}
+
+/* Action item checklist */
+.task-progress{margin-bottom:10px}
+.task-progress-bar{height:5px;border-radius:var(--radius-pill);background:var(--border);overflow:hidden;margin-top:5px}
+.task-progress-fill{height:100%;border-radius:var(--radius-pill);background:var(--green);transition:width .5s ease}
+.task-row{
+  display:flex;align-items:flex-start;gap:10px;padding:8px 0;
+  border-bottom:1px solid var(--border2);
+}
+.task-row:last-child{border-bottom:none}
+.task-check{
+  width:18px;height:18px;border:2px solid var(--border);border-radius:5px;
+  flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  margin-top:1px;transition:var(--transition);
+}
+.task-check.done{background:var(--green);border-color:var(--green);color:#fff}
+.task-check:not(.done):hover{border-color:var(--blue)}
+.task-info{flex:1;min-width:0}
+.task-action{font-size:13px;color:var(--txt-primary);line-height:1.4}
+.task-action.done{text-decoration:line-through;color:var(--txt-muted)}
+.task-meta{display:flex;gap:8px;margin-top:3px;flex-wrap:wrap}
+.task-pill{font-size:10.5px;font-weight:500;padding:1px 7px;border-radius:var(--radius-pill)}
+.tp-assignee{background:var(--blue-lt);color:var(--blue)}
+.tp-deadline{background:var(--orange-lt);color:var(--orange)}
+.tp-high{background:var(--red-lt);color:var(--red)}
+.tp-normal{background:var(--surface2);color:var(--txt-muted)}
+
+/* Deadline countdown chips */
+.deadline-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:var(--radius-pill);margin:3px;
+  font-size:12px;font-weight:500;border:1.5px solid;
+}
+.dc-critical{background:#fee2e2;border-color:#fca5a5;color:#dc2626}
+.dc-urgent{background:#fef3c7;border-color:#fcd34d;color:#b45309}
+.dc-normal{background:var(--blue-lt);border-color:#93c5fd;color:#2563eb}
+
+/* Executive brief */
+.exec-brief{background:var(--surface2);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:10px}
+.eb-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt-muted);margin-bottom:10px}
+.eb-row{display:flex;gap:8px;align-items:flex-start;padding:4px 0}
+.eb-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.eb-label{font-size:11px;font-weight:700;color:var(--txt-muted);min-width:72px;flex-shrink:0;padding-top:1px;text-transform:uppercase;letter-spacing:.04em}
+.eb-text{font-size:12.5px;color:var(--txt-primary);line-height:1.5}
+
+/* ── DASHBOARD ── */
+.dash-wrap{flex:1;overflow-y:auto;padding:28px 36px;background:var(--bg)}
+.dash-heading{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--txt-primary);margin-bottom:4px;letter-spacing:-.04em}
+.dash-sub{font-size:13.5px;color:var(--txt-muted);margin-bottom:28px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{
+  background:var(--canvas);border-radius:var(--radius-lg);padding:18px 16px;
+  border:1.5px solid var(--border);box-shadow:var(--shadow-xs);
+  transition:var(--transition);cursor:default;
+}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.stat-icon{font-size:22px;margin-bottom:8px}
+.stat-val{font-size:30px;font-weight:800;line-height:1;font-family:var(--font-display);color:var(--txt-primary)}
+.stat-label{font-size:11.5px;color:var(--txt-muted);font-weight:500;margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+
+.section-hd{font-size:14px;font-weight:700;color:var(--txt-primary);margin:24px 0 12px;font-family:var(--font-display)}
+.briefing-card{background:var(--canvas);border-radius:var(--radius-lg);border:1.5px solid var(--border);padding:20px;box-shadow:var(--shadow-xs)}
+.briefing-card p{font-size:14px;color:var(--txt-primary);line-height:1.65}
+.bl-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2)}
+.bl-row:last-child{border-bottom:none}
+.bl-row span{font-size:14px;color:var(--txt-primary)}
+.briefing-card .bl-dot{color:var(--blue);font-weight:900}
+
+/* Model info banner */
+.model-banner{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(90deg,var(--blue-lt),var(--purple-lt));
+  border:1px solid #c4b5fd;border-radius:var(--radius-pill);
+  padding:5px 14px;font-size:11.5px;color:var(--purple);font-weight:500;
+  margin-bottom:20px;
+}
+
+/* ── MODEL ANALYTICS DASHBOARD ── */
+.analytics-wrap{flex:1;overflow-y:auto;padding:28px 36px;background:var(--bg)}
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:1200px){.analytics-grid{grid-template-columns:1fr}}
+.analytics-card{background:var(--canvas);border-radius:var(--radius-lg);border:1.5px solid var(--border);padding:20px;box-shadow:var(--shadow-xs)}
+.ac-title{font-size:14px;font-weight:700;color:var(--txt-primary);font-family:var(--font-display);margin-bottom:14px}
+.benchmark-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2)}
+.benchmark-row:last-child{border-bottom:none}
+.bm-name{font-size:12.5px;color:var(--txt-secondary);min-width:200px;font-weight:500}
+.bm-name.winner{color:var(--blue);font-weight:700}
+.bm-bar-wrap{flex:1;height:7px;background:var(--border);border-radius:var(--radius-pill);overflow:hidden}
+.bm-bar{height:100%;border-radius:var(--radius-pill);transition:width 1s ease}
+.bm-pct{font-size:12px;font-weight:700;min-width:46px;text-align:right;color:var(--txt-primary)}
+.bm-crown{font-size:14px;margin-right:4px}
+.per-class-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border2)}
+.per-class-row:last-child{border-bottom:none}
+.pc-class{font-size:12px;min-width:70px;font-weight:600;color:var(--txt-primary)}
+.pc-metric{flex:1}
+.pc-label{font-size:10px;color:var(--txt-muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.pc-bar-wrap{height:6px;background:var(--border);border-radius:var(--radius-pill);overflow:hidden}
+.pc-bar{height:100%;border-radius:var(--radius-pill)}
+.pc-val{font-size:11.5px;font-weight:600;color:var(--txt-primary);min-width:40px;text-align:right}
+
+/* Dataset breakdown */
+.ds-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border2)}
+.ds-row:last-child{border-bottom:none}
+.ds-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ds-name{font-size:12.5px;color:var(--txt-primary);font-weight:500;flex:1}
+.ds-use{font-size:11px;color:var(--txt-muted);flex:1}
+.ds-count{font-size:12px;font-weight:700;color:var(--txt-primary)}
+
+/* ROUGE meters */
+.rouge-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2)}
+.rouge-row:last-child{border-bottom:none}
+.rouge-name{font-size:12px;min-width:70px;font-weight:600;color:var(--txt-primary)}
+.rouge-bar-wrap{flex:1;height:7px;background:var(--border);border-radius:var(--radius-pill);overflow:hidden}
+.rouge-bar{height:100%;border-radius:var(--radius-pill);background:linear-gradient(90deg,#2563eb,#7c3aed)}
+.rouge-val{font-size:11.5px;font-weight:700;color:var(--txt-primary);min-width:44px;text-align:right}
+
+/* ── CONVERSATIONS ── */
+.conv-wrap{flex:1;overflow-y:auto;padding:20px 28px;background:var(--bg)}
+.conv-card{background:var(--canvas);border:1.5px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow-xs)}
+.conv-hd{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;transition:background var(--transition)}
+.conv-hd:hover{background:var(--surface2)}
+.conv-title-row{flex:1}
+.conv-title{font-size:14px;font-weight:600;color:var(--txt-primary);font-family:var(--font-display)}
+.conv-parts{font-size:11.5px;color:var(--txt-muted);margin-top:2px}
+.conv-count{font-size:12px;color:var(--txt-muted);flex-shrink:0}
+.conv-body{padding:0 18px 16px}
+.conv-summary{font-size:13px;color:var(--txt-primary);line-height:1.55;margin-bottom:10px}
+.conv-email-row{font-size:12px;color:var(--txt-muted);padding:4px 10px;background:var(--surface2);border-radius:var(--radius-sm);margin-bottom:4px}
+
+/* ── PREFERENCES ── */
+.prefs-wrap{flex:1;overflow-y:auto;padding:28px 36px;background:var(--bg)}
+.pref-card{background:var(--canvas);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:14px;box-shadow:var(--shadow-xs)}
+.pref-card h3{font-size:15px;font-weight:700;color:var(--txt-primary);margin-bottom:14px;font-family:var(--font-display)}
+.pref-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.pref-row label{font-size:13px;color:var(--txt-secondary);min-width:130px;font-weight:500}
+.pref-row input{flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;background:var(--surface2);color:var(--txt-primary);outline:none;font-family:var(--font-sans)}
+.pref-row input:focus{border-color:var(--blue);background:var(--canvas)}
+.pref-tags{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.pref-tag{display:flex;align-items:center;gap:5px;background:var(--blue-lt);color:var(--blue);border-radius:var(--radius-pill);padding:3px 10px;font-size:12px;font-weight:500}
+.pref-tag button{background:none;border:none;cursor:pointer;color:var(--blue);font-size:14px;line-height:1}
+.pref-add{padding:5px 14px;border:1.5px dashed var(--blue);border-radius:var(--radius-pill);background:transparent;color:var(--blue);font-size:12px;cursor:pointer;font-family:var(--font-sans);font-weight:500}
+.pref-add:hover{background:var(--blue-lt)}
+.save-btn{padding:10px 26px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;border-radius:var(--radius-pill);font-size:14px;cursor:pointer;font-weight:600;font-family:var(--font-sans);transition:var(--transition)}
+.save-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+/* ── COMPOSE MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1000;display:flex;align-items:flex-end;justify-content:flex-end;padding:16px}
+.compose-modal{
+  width:680px;max-width:96vw;height:620px;max-height:90vh;
+  background:var(--canvas);border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow:var(--shadow-xl);display:flex;flex-direction:column;overflow:hidden;
+  transform:translateY(110%);transition:transform .28s cubic-bezier(.1,.9,.2,1);
+  border:1.5px solid var(--border);
+}
+.compose-modal.open{transform:translateY(0)}
+.modal-hd{display:flex;align-items:center;padding:12px 18px;background:var(--surface2);border-bottom:1px solid var(--border);flex-shrink:0}
+.modal-hd h3{font-size:14px;font-weight:700;flex:1;font-family:var(--font-display);color:var(--txt-primary)}
+.modal-close{background:none;border:none;color:var(--txt-muted);cursor:pointer;font-size:17px;padding:3px 8px;border-radius:var(--radius-sm);line-height:1}
+.modal-close:hover{background:var(--border);color:var(--txt-primary)}
+.compose-row{display:flex;align-items:center;padding:9px 18px;border-bottom:1px solid var(--border2);gap:12px;flex-shrink:0}
+.compose-label{font-size:12.5px;font-weight:600;color:var(--txt-muted);min-width:52px}
+.compose-input{flex:1;border:none;outline:none;font-size:14px;color:var(--txt-primary);background:transparent;font-family:var(--font-sans)}
+.compose-input::placeholder{color:var(--txt-muted)}
+.ai-bar{display:flex;align-items:center;gap:8px;padding:8px 18px;background:var(--surface2);border-bottom:1px solid var(--border2);flex-shrink:0}
+.ai-input{flex:1;border:none;outline:none;background:transparent;font-size:13px;color:var(--txt-primary);font-family:var(--font-sans)}
+.ai-input::placeholder{color:var(--txt-muted)}
+.ai-draft-btn{
+  display:flex;align-items:center;gap:5px;padding:5px 14px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+  border:none;border-radius:var(--radius-pill);cursor:pointer;font-size:12px;font-weight:600;
+  font-family:var(--font-sans);transition:var(--transition);
+}
+.ai-draft-btn:hover{opacity:.88}
+.ai-draft-btn:disabled{opacity:.45;cursor:not-allowed}
+.compose-body{flex:1;border:none;outline:none;padding:16px 18px;font-size:14px;line-height:1.65;color:var(--txt-primary);resize:none;font-family:var(--font-sans);background:var(--canvas);overflow-y:auto}
+.compose-body::placeholder{color:var(--txt-muted)}
+.modal-footer{display:flex;align-items:center;gap:10px;padding:10px 18px;border-top:1px solid var(--border);background:var(--canvas);flex-shrink:0}
+.send-gmail-btn{
+  display:inline-flex;align-items:center;gap:7px;padding:9px 20px;
+  background:linear-gradient(135deg,var(--blue),#4f46e5);color:#fff;
+  border:none;border-radius:var(--radius-pill);cursor:pointer;font-size:13px;font-weight:600;
+  font-family:var(--font-sans);box-shadow:0 4px 12px rgba(37,99,235,.35);transition:var(--transition);
+}
+.send-gmail-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,99,235,.45)}
+.discard-btn{background:none;border:none;color:var(--txt-muted);cursor:pointer;font-size:17px;padding:4px 8px;border-radius:var(--radius-sm);margin-left:auto}
+.discard-btn:hover{background:var(--border)}
+
+/* Status toast inside modal */
+.modal-status{padding:8px 18px;font-size:12.5px;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:8px}
+.ms-info{background:var(--blue-lt);color:var(--blue)}
+.ms-success{background:var(--green-lt);color:var(--green)}
+.ms-error{background:var(--red-lt);color:var(--red)}
+
+/* ── ANALYZE MODAL ── */
+.amodal{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px}
+.amodal-box{background:var(--canvas);border-radius:var(--radius-xl);width:640px;max-height:90vh;box-shadow:var(--shadow-xl);display:flex;flex-direction:column;overflow:hidden;border:1.5px solid var(--border)}
+.amodal-hd{padding:22px 24px 16px;border-bottom:1px solid var(--border)}
+.amodal-hd h2{font-size:18px;font-family:var(--font-display);font-weight:700;color:var(--txt-primary)}
+.amodal-hd p{font-size:13px;color:var(--txt-muted);margin-top:4px}
+.amodal-body{padding:20px 24px;overflow-y:auto;flex:1}
+.amodal-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.btn-cancel{padding:8px 20px;border:1.5px solid var(--border);background:var(--canvas);border-radius:var(--radius-pill);cursor:pointer;font-size:13px;color:var(--txt-secondary);font-family:var(--font-sans);font-weight:500}
+.btn-cancel:hover{background:var(--surface2)}
+.btn-analyze{padding:8px 20px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;border-radius:var(--radius-pill);cursor:pointer;font-size:13px;font-weight:600;font-family:var(--font-sans)}
+.btn-analyze:hover{opacity:.88}
+.btn-analyze:disabled{opacity:.45;cursor:not-allowed}
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius-lg);padding:30px;text-align:center;cursor:pointer;transition:var(--transition);margin-bottom:16px}
+.upload-zone:hover{border-color:var(--blue);background:var(--blue-lt)}
+.upload-zone input{display:none}
+.modal-field{margin-bottom:12px}
+.modal-field label{display:block;font-size:11.5px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.modal-field input,.modal-field textarea{
+  width:100%;padding:9px 12px;border:1.5px solid var(--border);
+  border-radius:var(--radius-md);font-size:13.5px;background:var(--surface2);
+  color:var(--txt-primary);outline:none;font-family:var(--font-sans);
+}
+.modal-field input:focus,.modal-field textarea:focus{border-color:var(--blue);background:var(--canvas)}
+.modal-field textarea{min-height:120px;resize:vertical}
+
+/* Result pill */
+.res-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:var(--radius-pill);font-size:12px;font-weight:700;color:#fff;margin-right:6px;margin-bottom:4px}
+
+/* ── GLOBAL TOAST ── */
+.g-toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--txt-primary);color:var(--canvas);
+  padding:12px 20px;border-radius:var(--radius-md);font-size:13.5px;font-weight:500;
+  z-index:9999;box-shadow:var(--shadow-xl);
+  animation:toast-in .25s ease;
+}
+@keyframes toast-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SPINNER ── */
+.spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner-dark{border:2.5px solid var(--border);border-top-color:var(--blue)}
+
+/* Loading skeleton */
+.skeleton{background:linear-gradient(90deg,var(--border) 25%,var(--surface2) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:var(--radius-sm)}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+
+/* ── KEYBOARD SHORTCUT ── */
+kbd{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;padding:0 5px;border:1px solid var(--border);border-radius:4px;font-size:10px;font-family:monospace;color:var(--txt-muted);background:var(--surface2)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){.reading-pane{display:none}:root{--list-w:100%}}
+@media(max-width:640px){.sidebar{display:none}}
+</style>
 </head>
-<body class="text-slate-800 antialiased selection:bg-blue-500 selection:text-white">
-  <div id="root"></div>
+<body>
+<div id="app"></div>
 
-  <script type="text/babel">
-    const { useState, useEffect, useMemo } = React;
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback,useMemo}=React;
+const API="http://127.0.0.1:8000";
 
-    const API_BASE = "http://127.0.0.1:8000";
+// ── Helpers ─────────────────────────────────────────────────────────────────
+const PC={CRITICAL:"#dc2626",HIGH:"#d97706",MEDIUM:"#2563eb",LOW:"#059669"};
+const pColor=p=>PC[p]||"#6b7280";
+const pClass=p=>({CRITICAL:"rtag-critical",HIGH:"rtag-high",MEDIUM:"rtag-medium",LOW:"rtag-low"}[p]||"rtag-cat");
+const pbClass=p=>({CRITICAL:"pb-critical",HIGH:"pb-high",MEDIUM:"pb-medium",LOW:"pb-low"}[p]||"pb-low");
+const initials=n=>(n||"?").split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase()||"?";
+const snippet=(t="",l=90)=>{const s=t.replace(/\n/g," ").trim();return s.length>l?s.slice(0,l)+"…":s};
 
-    function App() {
-      const [activeTab, setActiveTab] = useState("dashboard"); // dashboard, inbox, analysis, conversations, summary, preferences
-      const [dashboardData, setDashboardData] = useState(null);
-      const [loading, setLoading] = useState(true);
-      const [error, setError] = useState(null);
-      const [selectedEmail, setSelectedEmail] = useState(null);
-      const [preferences, setPreferences] = useState(null);
-      const [statsData, setStatsData] = useState(null);
+function formatTime(ts=""){
+  if(!ts||["Just now","Uploaded Just Now","Now"].includes(ts)) return ts||"Now";
+  try{
+    const d=new Date(ts);
+    if(isNaN(d)) return ts;
+    const diff=Date.now()-d;
+    if(diff<60000) return "Just now";
+    if(diff<3600000) return Math.round(diff/60000)+"m ago";
+    if(diff<86400000) return d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+    return d.toLocaleDateString([],{month:"short",day:"numeric"});
+  }catch{return ts}
+}
 
-      // Search & Filters for Inbox
-      const [searchQuery, setSearchQuery] = useState("");
-      const [priorityFilter, setPriorityFilter] = useState("ALL");
+function deadlineCountdown(normalized){
+  if(!normalized) return null;
+  const now=new Date();
+  try{
+    const target=new Date(normalized.replace(/\(.*\)/,"").trim());
+    if(isNaN(target)) return null;
+    const diff=target-now;
+    const h=Math.round(diff/3600000);
+    const d=Math.round(diff/86400000);
+    if(h<0) return {label:"Overdue",cls:"dc-critical"};
+    if(h<6) return {label:`Due in ${h} hour${h!==1?"s":""}`,cls:"dc-critical"};
+    if(d<1) return {label:"Due Today",cls:"dc-urgent"};
+    if(d===1) return {label:"Due Tomorrow",cls:"dc-urgent"};
+    if(d<7) return {label:`Due in ${d} days`,cls:"dc-normal"};
+    return {label:`Due ${target.toLocaleDateString([],{month:"short",day:"numeric"})}`,cls:"dc-normal"};
+  }catch{return null}
+}
 
-      // Live Demo / Modal state
-      const [isModalOpen, setIsModalOpen] = useState(false);
-      const [modalMode, setModalMode] = useState("manual"); // manual, sample, upload
-      const [demoSubject, setDemoSubject] = useState("");
-      const [demoBody, setDemoBody] = useState("");
-      const [demoSender, setDemoSender] = useState("vip.client@enterprise.com");
-      const [demoReceiver, setDemoReceiver] = useState("Executive User");
-      const [analyzing, setAnalyzing] = useState(false);
-      const [sampleList, setSampleList] = useState([]);
+// ── Toast ───────────────────────────────────────────────────────────────────
+function Toast({msg,onDone}){
+  useEffect(()=>{const t=setTimeout(onDone,2800);return()=>clearTimeout(t)},[]);
+  return <div className="g-toast">{msg}</div>;
+}
 
-      // Fetch dashboard on mount
-      useEffect(() => {
-        fetchDashboard();
-        fetchPreferences();
-        fetchStats();
-        fetchSampleList();
-      }, []);
+// ── Confidence Gauge (SVG) ───────────────────────────────────────────────────
+function ConfGauge({pct,color}){
+  const r=26,circ=2*Math.PI*r,dash=(pct/100)*circ;
+  return (
+    <div className="conf-gauge">
+      <svg className="gauge-svg" width="64" height="64" viewBox="0 0 64 64">
+        <circle className="gauge-bg" cx="32" cy="32" r={r}/>
+        <circle className="gauge-fill" cx="32" cy="32" r={r}
+          stroke={color} strokeDasharray={`${dash} ${circ}`}/>
+      </svg>
+      <div className="gauge-label">
+        <span className="gauge-pct">{pct}%</span>
+        <span className="gauge-sub">conf</span>
+      </div>
+    </div>
+  );
+}
 
-      const fetchDashboard = async () => {
-        try {
-          setLoading(true);
-          const res = await fetch(`${API_BASE}/api/dashboard`);
-          if (!res.ok) throw new Error("Backend server not responding");
-          const data = await res.json();
-          setDashboardData(data);
-          if (data.emails && data.emails.length > 0 && !selectedEmail) {
-            setSelectedEmail(data.emails[0]);
-          }
-          setError(null);
-        } catch (err) {
-          console.error(err);
-          setError("Failed to connect to FastAPI backend at " + API_BASE + ". Make sure 'python backend/main.py' is running.");
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      const fetchPreferences = async () => {
-        try {
-          const res = await fetch(`${API_BASE}/api/preferences`);
-          if (res.ok) {
-            const data = await res.json();
-            setPreferences(data);
-          }
-        } catch (e) {}
-      };
-
-      const fetchStats = async () => {
-        try {
-          const res = await fetch(`${API_BASE}/api/stats`);
-          if (res.ok) {
-            const data = await res.json();
-            setStatsData(data);
-          }
-        } catch (e) {}
-      };
-
-      const fetchSampleList = async () => {
-        try {
-          const res = await fetch(`${API_BASE}/api/emails/sample`);
-          if (res.ok) {
-            const data = await res.json();
-            setSampleList(data);
-          }
-        } catch (e) {}
-      };
-
-      const handleAnalyzeManual = async (e) => {
-        e.preventDefault();
-        if (!demoSubject || !demoBody) return;
-        setAnalyzing(true);
-        try {
-          const res = await fetch(`${API_BASE}/api/analyze`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              subject: demoSubject,
-              body: demoBody,
-              sender: demoSender,
-              receiver: demoReceiver,
-              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            })
-          });
-          if (res.ok) {
-            const analyzed = await res.json();
-            setSelectedEmail(analyzed);
-            setIsModalOpen(false);
-            setDemoSubject("");
-            setDemoBody("");
-            await fetchDashboard();
-            setActiveTab("analysis");
-          }
-        } catch (err) {
-          alert("Analysis error: " + err);
-        } finally {
-          setAnalyzing(false);
-        }
-      };
-
-      const handlePickSample = (sample) => {
-        setDemoSubject(sample.subject);
-        setDemoBody(sample.body);
-        setDemoSender(sample.sender);
-        setDemoReceiver(sample.receiver || "Executive User");
-      };
-
-      const handleFileUpload = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        setAnalyzing(true);
-        const formData = new FormData();
-        formData.append("file", file);
-        try {
-          const res = await fetch(`${API_BASE}/api/upload`, {
-            method: "POST",
-            body: formData
-          });
-          if (res.ok) {
-            const analyzed = await res.json();
-            setSelectedEmail(analyzed);
-            setIsModalOpen(false);
-            await fetchDashboard();
-            setActiveTab("analysis");
-          } else {
-            alert("File upload failed");
-          }
-        } catch (err) {
-          alert("Upload error: " + err);
-        } finally {
-          setAnalyzing(false);
-        }
-      };
-
-      const handleResetInbox = async () => {
-        if (!confirm("Reset inbox back to the default demonstration emails?")) return;
-        await fetch(`${API_BASE}/api/inbox/reset`, { method: "POST" });
-        await fetchDashboard();
-      };
-
-      const handleSavePreferences = async (updated) => {
-        try {
-          const res = await fetch(`${API_BASE}/api/preferences`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updated)
-          });
-          if (res.ok) {
-            const data = await res.json();
-            setPreferences(data);
-            await fetchDashboard();
-            alert("Preferences updated and inbox re-scored successfully!");
-          }
-        } catch (e) {
-          alert("Failed to update preferences: " + e);
-        }
-      };
-
-      const filteredEmails = useMemo(() => {
-        if (!dashboardData || !dashboardData.emails) return [];
-        return dashboardData.emails.filter(em => {
-          const matchesPriority = priorityFilter === "ALL" || em.urgency?.priority === priorityFilter;
-          const matchesSearch = !searchQuery ||
-            em.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            em.sender.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            em.body.toLowerCase().includes(searchQuery.toLowerCase());
-          return matchesPriority && matchesSearch;
-        });
-      }, [dashboardData, priorityFilter, searchQuery]);
-
-      // Priority Badge Renderer
-      const renderBadge = (priority) => {
-        switch (priority) {
-          case "CRITICAL":
-            return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-critical inline-flex items-center gap-1">🔴 CRITICAL</span>;
-          case "HIGH":
-            return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-high inline-flex items-center gap-1">🟠 HIGH</span>;
-          case "MEDIUM":
-            return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-medium inline-flex items-center gap-1">🟡 MEDIUM</span>;
-          default:
-            return <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold badge-low inline-flex items-center gap-1">🟢 LOW</span>;
-        }
-      };
-
-      return (
-        <div className="min-h-screen flex flex-col bg-slate-50">
-          {/* Top Header */}
-          <header className="bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-30 shadow-md">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 text-white font-bold text-xl">
-                  ✉️
-                </div>
-                <div>
-                  <h1 className="font-bold text-lg leading-tight flex items-center gap-2">
-                    Executive Email Assistant
-                    <span className="text-xs bg-blue-500/20 text-blue-400 font-medium px-2 py-0.5 rounded border border-blue-500/30">NLP Powered</span>
-                  </h1>
-                  <p className="text-xs text-slate-400">Intelligent Urgency · Action Items · Deadlines · Daily Briefings</p>
-                </div>
-              </div>
-
-              {/* Navigation Links */}
-              <nav className="hidden md:flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700">
-                {[
-                  { id: "dashboard", label: "Dashboard", icon: "📊" },
-                  { id: "inbox", label: "Email Inbox", icon: "📥" },
-                  { id: "analysis", label: "Deep Analysis", icon: "🔍" },
-                  { id: "conversations", label: "Conversations", icon: "💬" },
-                  { id: "summary", label: "Daily Briefing", icon: "📋" },
-                  { id: "preferences", label: "Preferences", icon: "⚙️" },
-                ].map(tab => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
-                      activeTab === tab.id
-                        ? "bg-blue-600 text-white shadow-sm"
-                        : "text-slate-300 hover:text-white hover:bg-slate-700/60"
-                    }`}
-                  >
-                    <span>{tab.icon}</span>
-                    <span>{tab.label}</span>
-                  </button>
-                ))}
-              </nav>
-
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all shadow-emerald-600/20"
-                >
-                  <span>✨</span>
-                  <span>Test New Email</span>
-                </button>
-                <button
-                  onClick={fetchDashboard}
-                  title="Refresh Data"
-                  className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
-                >
-                  🔄
-                </button>
-              </div>
+// ── Interactive Action Checklist ─────────────────────────────────────────────
+function ActionChecklist({actions}){
+  const [checks,setChecks]=useState(()=>(actions||[]).map(()=>false));
+  const done=checks.filter(Boolean).length;
+  const total=checks.length;
+  if(!total) return <p style={{fontSize:13,color:"var(--txt-muted)"}}>No action items detected.</p>;
+  return (
+    <div>
+      <div className="task-progress">
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:11.5,color:"var(--txt-muted)",marginBottom:4}}>
+          <span style={{fontWeight:600}}>{done} of {total} completed</span>
+          <span>{Math.round((done/total)*100)}%</span>
+        </div>
+        <div className="task-progress-bar">
+          <div className="task-progress-fill" style={{width:`${(done/total)*100}%`}}/>
+        </div>
+      </div>
+      {actions.map((a,i)=>{
+        const isDone=checks[i];
+        const prio=(a.priority||"NORMAL").toUpperCase();
+        const deadline=a.deadline&&a.deadline!=="No deadline specified"?a.deadline:null;
+        return (
+          <div key={i} className="task-row">
+            <div className={`task-check ${isDone?"done":""}`}
+              onClick={()=>setChecks(c=>{const n=[...c];n[i]=!n[i];return n})}>
+              {isDone&&"✓"}
             </div>
-          </header>
-
-          {/* Subheader / Status Bar */}
-          <div className="bg-white border-b border-slate-200 px-4 py-2 text-xs text-slate-500">
-            <div className="max-w-7xl mx-auto flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1.5 text-emerald-600 font-medium">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  FastAPI NLP Backend: Online
-                </span>
-                <span>•</span>
-                <span>Active Model: <strong>LinearSVC (TF-IDF)</strong> (83.6% accuracy on Customer Care)</span>
-                <span>•</span>
-                <span>Benchmark: <strong>EPA Dataset</strong> (94.0% F1 on Task Extraction)</span>
-              </div>
-              <div>
-                <span>Demonstrating 5 Datasets: Enron, Customer Care, EmailThread, EPA, EmailSum</span>
+            <div className="task-info">
+              <div className={`task-action ${isDone?"done":""}`}>{a.action||String(a)}</div>
+              <div className="task-meta">
+                {a.responsible_person&&a.responsible_person!=="Unassigned"&&
+                  <span className="task-pill tp-assignee">👤 {a.responsible_person}</span>}
+                {deadline&&<span className="task-pill tp-deadline">📅 {deadline}</span>}
+                <span className={`task-pill ${prio==="HIGH"?"tp-high":"tp-normal"}`}>{prio}</span>
               </div>
             </div>
           </div>
+        );
+      })}
+    </div>
+  );
+}
 
-          {/* Error Alert */}
-          {error && (
-            <div className="max-w-7xl mx-auto px-4 mt-4">
-              <div className="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <span>⚠️</span>
-                  <span>{error}</span>
-                </div>
-                <button onClick={fetchDashboard} className="underline font-semibold hover:text-rose-900">Retry</button>
-              </div>
-            </div>
-          )}
+// ── NLP Analysis Panel ───────────────────────────────────────────────────────
+function NLPPanel({email}){
+  const [open,setOpen]=useState({urgency:true,explain:false,actions:true,deadlines:true,category:false,summary:false,brief:false});
+  const tog=k=>setOpen(o=>({...o,[k]:!o[k]}));
+  const u=email?.urgency||{};
+  const prio=u.priority||"LOW";
+  const conf=Math.round((u.confidence||0)*100);
+  const actions=email?.action_items||[];
+  const deadlines=email?.deadlines||[];
+  const cat=email?.category||{};
+  const sum=email?.summary||"";
+  const brief=email?.executive_brief||{};
+  const signals=u.signals_breakdown||[];
+  const color=pColor(prio);
 
-          {/* Main Content Area */}
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
-            {loading ? (
-              <div className="py-24 text-center">
-                <div className="inline-block w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                <p className="mt-4 text-sm font-medium text-slate-600">Running NLP analysis and preparing executive intelligence suite...</p>
-              </div>
-            ) : (
-              <div>
-                {/* 1. DASHBOARD PAGE */}
-                {activeTab === "dashboard" && (
-                  <div className="space-y-6">
-                    {/* Top Stats Metric Cards */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
-                      <div className="glass-card p-4 rounded-2xl shadow-sm border border-slate-200">
-                        <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Inbox</div>
-                        <div className="text-3xl font-extrabold text-slate-900 mt-1">{dashboardData?.stats?.total || 0}</div>
-                        <div className="text-[11px] text-slate-400 mt-1">Incoming emails</div>
-                      </div>
-                      <div className="glass-card p-4 rounded-2xl shadow-sm border border-rose-200 bg-rose-50/30">
-                        <div className="text-xs font-semibold text-rose-700 uppercase tracking-wider">Critical</div>
-                        <div className="text-3xl font-extrabold text-rose-600 mt-1">{dashboardData?.stats?.critical || 0}</div>
-                        <div className="text-[11px] text-rose-500 mt-1">Requires immediate response</div>
-                      </div>
-                      <div className="glass-card p-4 rounded-2xl shadow-sm border border-amber-200 bg-amber-50/30">
-                        <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider">High Priority</div>
-                        <div className="text-3xl font-extrabold text-amber-600 mt-1">{dashboardData?.stats?.high || 0}</div>
-                        <div className="text-[11px] text-amber-500 mt-1">Due today / escalated</div>
-                      </div>
-                      <div className="glass-card p-4 rounded-2xl shadow-sm border border-yellow-200 bg-yellow-50/30">
-                        <div className="text-xs font-semibold text-yellow-700 uppercase tracking-wider">Medium</div>
-                        <div className="text-3xl font-extrabold text-yellow-600 mt-1">{dashboardData?.stats?.medium || 0}</div>
-                        <div className="text-[11px] text-yellow-500 mt-1">Standard follow-ups</div>
-                      </div>
-                      <div className="glass-card p-4 rounded-2xl shadow-sm border border-blue-200 bg-blue-50/30">
-                        <div className="text-xs font-semibold text-blue-700 uppercase tracking-wider">Action Items</div>
-                        <div className="text-3xl font-extrabold text-blue-600 mt-1">{dashboardData?.stats?.action_items || 0}</div>
-                        <div className="text-[11px] text-blue-500 mt-1">Assigned tasks detected</div>
-                      </div>
-                      <div className="glass-card p-4 rounded-2xl shadow-sm border border-emerald-200 bg-emerald-50/30">
-                        <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Deadlines</div>
-                        <div className="text-3xl font-extrabold text-emerald-600 mt-1">{dashboardData?.stats?.deadlines || 0}</div>
-                        <div className="text-[11px] text-emerald-500 mt-1">Recognized dates/times</div>
-                      </div>
-                    </div>
-
-                    {/* Middle Two-Column Grid: Urgent Emails & Action Items */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {/* Critical & High Priority Queue */}
-                      <div className="glass-card rounded-2xl p-5 shadow-sm">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                          <h2 className="font-bold text-base text-slate-900 flex items-center gap-2">
-                            <span>⚡</span>
-                            <span>Critical & High Priority Queue</span>
-                          </h2>
-                          <button
-                            onClick={() => { setPriorityFilter("HIGH"); setActiveTab("inbox"); }}
-                            className="text-xs font-medium text-blue-600 hover:text-blue-800"
-                          >
-                            View All →
-                          </button>
-                        </div>
-                        <div className="divide-y divide-slate-100 mt-2">
-                          {dashboardData?.emails
-                            ?.filter(e => e.urgency?.priority === "CRITICAL" || e.urgency?.priority === "HIGH")
-                            .slice(0, 5)
-                            .map((email, idx) => (
-                              <div
-                                key={idx}
-                                onClick={() => { setSelectedEmail(email); setActiveTab("analysis"); }}
-                                className="py-3 px-2 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors flex items-start justify-between gap-3"
-                              >
-                                <div className="min-w-0 flex-1">
-                                  <div className="flex items-center gap-2">
-                                    {renderBadge(email.urgency?.priority)}
-                                    <span className="text-xs text-slate-500 font-mono truncate">{email.sender}</span>
-                                  </div>
-                                  <h3 className="font-semibold text-sm text-slate-800 mt-1 truncate">{email.subject}</h3>
-                                  <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{email.summary || email.body}</p>
-                                </div>
-                                <div className="text-[11px] text-slate-400 font-mono whitespace-nowrap">
-                                  {email.timestamp}
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-
-                      {/* Pending Action Items & Deadlines */}
-                      <div className="glass-card rounded-2xl p-5 shadow-sm">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                          <h2 className="font-bold text-base text-slate-900 flex items-center gap-2">
-                            <span>✅</span>
-                            <span>Action Items & Extracted Deadlines</span>
-                          </h2>
-                          <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">
-                            EPA Dataset Addressee Engine
-                          </span>
-                        </div>
-                        <div className="space-y-2.5 mt-3 max-h-[340px] overflow-y-auto pr-1">
-                          {dashboardData?.daily_summary?.pending_action_items?.slice(0, 6).map((act, i) => (
-                            <div key={i} className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl hover:border-blue-300 transition-colors">
-                              <div className="flex items-start justify-between gap-2">
-                                <div className="font-semibold text-xs text-slate-900 flex items-center gap-1.5">
-                                  <input type="checkbox" className="rounded text-blue-600" />
-                                  <span>{act.action}</span>
-                                </div>
-                                <span className="text-[10px] font-mono bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded whitespace-nowrap">
-                                  👤 {act.responsible_person}
-                                </span>
-                              </div>
-                              <div className="flex items-center justify-between mt-2 text-[11px] text-slate-500">
-                                <span className="truncate max-w-[200px]">Ref: {act.email_subject}</span>
-                                {act.deadline && act.deadline !== "No deadline specified" && (
-                                  <span className="text-amber-600 font-medium">⏳ {act.deadline}</span>
-                                )}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bottom Section: Grouped Conversations & Executive Summary Preview */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                      {/* Recent Conversation Threads */}
-                      <div className="glass-card rounded-2xl p-5 shadow-sm lg:col-span-1">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                          <h2 className="font-bold text-base text-slate-900 flex items-center gap-2">
-                            <span>💬</span>
-                            <span>Conversation Threads</span>
-                          </h2>
-                          <button
-                            onClick={() => setActiveTab("conversations")}
-                            className="text-xs font-medium text-blue-600 hover:text-blue-800"
-                          >
-                            Explore All →
-                          </button>
-                        </div>
-                        <div className="space-y-2.5 mt-3">
-                          {dashboardData?.conversations?.slice(0, 4).map((conv, idx) => (
-                            <div
-                              key={idx}
-                              onClick={() => setActiveTab("conversations")}
-                              className="p-3 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
-                            >
-                              <div className="flex items-center justify-between">
-                                <span className="text-xs font-semibold text-slate-800 truncate max-w-[180px]">{conv.subject}</span>
-                                <span className="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-bold">
-                                  {conv.num_emails} emails
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-slate-500 mt-1 line-clamp-2">{conv.summary}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Daily Executive Briefing Preview */}
-                      <div className="glass-card rounded-2xl p-5 shadow-sm lg:col-span-2">
-                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                          <h2 className="font-bold text-base text-slate-900 flex items-center gap-2">
-                            <span>📋</span>
-                            <span>Personalized Daily Executive Briefing</span>
-                          </h2>
-                          <button
-                            onClick={() => setActiveTab("summary")}
-                            className="bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold px-3 py-1 rounded-lg text-xs"
-                          >
-                            Open Full Briefing →
-                          </button>
-                        </div>
-                        <div className="mt-3 bg-slate-50 border border-slate-200 p-4 rounded-xl font-sans text-xs text-slate-700 space-y-2 leading-relaxed max-h-[300px] overflow-y-auto whitespace-pre-line font-mono">
-                          {dashboardData?.daily_summary?.briefing_markdown}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* 2. EMAIL INBOX PAGE */}
-                {activeTab === "inbox" && (
-                  <div className="glass-card rounded-2xl shadow-sm p-5 space-y-4">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
-                      <div>
-                        <h2 className="font-bold text-lg text-slate-900">Executive Email Inbox</h2>
-                        <p className="text-xs text-slate-500">Classified, prioritized, and augmented with NLP intelligence</p>
-                      </div>
-
-                      {/* Filters */}
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <input
-                          type="text"
-                          placeholder="Search sender, subject, body..."
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="px-3 py-1.5 bg-slate-100 rounded-lg text-xs border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-52"
-                        />
-                        <select
-                          value={priorityFilter}
-                          onChange={(e) => setPriorityFilter(e.target.value)}
-                          className="px-3 py-1.5 bg-slate-100 rounded-lg text-xs border border-slate-300 focus:outline-none font-medium"
-                        >
-                          <option value="ALL">All Priorities</option>
-                          <option value="CRITICAL">🔴 Critical</option>
-                          <option value="HIGH">🟠 High</option>
-                          <option value="MEDIUM">🟡 Medium</option>
-                          <option value="LOW">🟢 Low</option>
-                        </select>
-                        <button
-                          onClick={handleResetInbox}
-                          className="px-2.5 py-1.5 text-xs text-slate-600 hover:text-slate-900 bg-slate-200 rounded-lg font-medium"
-                          title="Reset to 15 original sample emails"
-                        >
-                          Reset Inbox
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Email Table / List */}
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-xs">
-                        <thead>
-                          <tr className="bg-slate-100/80 text-slate-600 font-semibold border-b border-slate-200">
-                            <th className="py-2.5 px-3">Priority</th>
-                            <th className="py-2.5 px-3">Sender</th>
-                            <th className="py-2.5 px-3">Subject</th>
-                            <th className="py-2.5 px-3">Action Items</th>
-                            <th className="py-2.5 px-3">Deadline</th>
-                            <th className="py-2.5 px-3">Time</th>
-                            <th className="py-2.5 px-3 text-right">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100">
-                          {filteredEmails.map((email, idx) => (
-                            <tr
-                              key={idx}
-                              onClick={() => { setSelectedEmail(email); setActiveTab("analysis"); }}
-                              className={`hover:bg-blue-50/50 cursor-pointer transition-colors ${
-                                email.is_highlighted ? "bg-amber-50/20 font-medium" : ""
-                              }`}
-                            >
-                              <td className="py-3 px-3 whitespace-nowrap">
-                                {renderBadge(email.urgency?.priority)}
-                              </td>
-                              <td className="py-3 px-3 font-mono text-slate-700 max-w-[140px] truncate">
-                                {email.sender}
-                              </td>
-                              <td className="py-3 px-3 text-slate-900 max-w-[280px]">
-                                <div className="font-semibold truncate">{email.subject}</div>
-                                <div className="text-[11px] text-slate-400 truncate">{email.summary || email.body}</div>
-                              </td>
-                              <td className="py-3 px-3 whitespace-nowrap">
-                                {email.action_items && email.action_items.length > 0 ? (
-                                  <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[11px] font-medium">
-                                    {email.action_items.length} tasks
-                                  </span>
-                                ) : (
-                                  <span className="text-slate-400 text-[11px]">None</span>
-                                )}
-                              </td>
-                              <td className="py-3 px-3 whitespace-nowrap">
-                                {email.deadlines && email.deadlines.length > 0 ? (
-                                  <span className="text-amber-700 font-medium text-[11px]">
-                                    ⏳ {email.deadlines[0].raw}
-                                  </span>
-                                ) : (
-                                  <span className="text-slate-400 text-[11px]">—</span>
-                                )}
-                              </td>
-                              <td className="py-3 px-3 text-slate-400 font-mono whitespace-nowrap">
-                                {email.timestamp}
-                              </td>
-                              <td className="py-3 px-3 text-right whitespace-nowrap">
-                                <button className="text-blue-600 hover:text-blue-800 font-semibold text-xs">
-                                  Inspect →
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-
-                {/* 3. EMAIL DEEP ANALYSIS PAGE */}
-                {activeTab === "analysis" && selectedEmail && (
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Left: Email Details & Body */}
-                    <div className="glass-card rounded-2xl p-6 shadow-sm lg:col-span-2 space-y-5">
-                      <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-200">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1.5">
-                            {renderBadge(selectedEmail.urgency?.priority)}
-                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">
-                              Score: {selectedEmail.personalized_score || selectedEmail.urgency?.score}
-                            </span>
-                          </div>
-                          <h2 className="text-xl font-bold text-slate-900 leading-snug">{selectedEmail.subject}</h2>
-                          <div className="text-xs text-slate-500 font-mono mt-2 space-y-0.5">
-                            <div><strong>From:</strong> {selectedEmail.sender}</div>
-                            <div><strong>To:</strong> {selectedEmail.receiver || "Executive Team"}</div>
-                            <div><strong>Date:</strong> {selectedEmail.timestamp}</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Extractive Summary Box */}
-                      <div className="bg-blue-50/60 border border-blue-200 p-4 rounded-xl">
-                        <div className="text-xs font-bold text-blue-900 uppercase tracking-wider flex items-center gap-1.5">
-                          <span>📝</span>
-                          <span>Extractive NLP Summary (EmailThread & EmailSum Models)</span>
-                        </div>
-                        <p className="text-xs text-blue-950 mt-1.5 leading-relaxed font-medium">
-                          {selectedEmail.summary || "Summary generated from key sentence importance scoring."}
-                        </p>
-                      </div>
-
-                      {/* Full Email Body */}
-                      <div>
-                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Original Email Content</h3>
-                        <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl text-xs text-slate-800 leading-relaxed whitespace-pre-wrap font-sans">
-                          {selectedEmail.body}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: NLP Analysis Breakdown */}
-                    <div className="space-y-6">
-                      {/* Urgency Classification Breakdown */}
-                      <div className="glass-card rounded-2xl p-5 shadow-sm space-y-3">
-                        <h3 className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
-                          <span>📊</span>
-                          <span>Urgency Classification</span>
-                        </h3>
-                        <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
-                          <div className="flex justify-between text-xs">
-                            <span className="text-slate-500">Predicted Priority:</span>
-                            <span className="font-bold">{selectedEmail.urgency?.priority}</span>
-                          </div>
-                          <div className="flex justify-between text-xs">
-                            <span className="text-slate-500">Model Confidence:</span>
-                            <span className="font-mono font-semibold">{Math.round((selectedEmail.urgency?.confidence || 0.8) * 100)}%</span>
-                          </div>
-                          {/* Probability distribution */}
-                          {selectedEmail.urgency?.probabilities && (
-                            <div className="pt-2 border-t border-slate-200 text-[11px] space-y-1">
-                              <div className="text-slate-400 font-semibold uppercase text-[10px]">Probability Distribution:</div>
-                              <div className="flex justify-between">
-                                <span>High:</span>
-                                <span className="font-mono">{Math.round((selectedEmail.urgency.probabilities.high || 0) * 100)}%</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span>Medium:</span>
-                                <span className="font-mono">{Math.round((selectedEmail.urgency.probabilities.medium || 0) * 100)}%</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span>Low:</span>
-                                <span className="font-mono">{Math.round((selectedEmail.urgency.probabilities.low || 0) * 100)}%</span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Detected Urgency Signals */}
-                        <div>
-                          <div className="text-xs font-semibold text-slate-700 mb-1.5">Detected Urgency Signals:</div>
-                          <div className="space-y-1">
-                            {selectedEmail.urgency?.signals && selectedEmail.urgency.signals.length > 0 ? (
-                              selectedEmail.urgency.signals.map((sig, sIdx) => (
-                                <div key={sIdx} className="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md border border-slate-200/80 font-mono">
-                                  • {sig}
-                                </div>
-                              ))
-                            ) : (
-                              <div className="text-xs text-slate-400 italic">No strong lexical flags triggered.</div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Action Items Box */}
-                      <div className="glass-card rounded-2xl p-5 shadow-sm space-y-3">
-                        <h3 className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
-                          <span>✅</span>
-                          <span>Extracted Action Items</span>
-                        </h3>
-                        {selectedEmail.action_items && selectedEmail.action_items.length > 0 ? (
-                          <div className="space-y-2">
-                            {selectedEmail.action_items.map((act, aIdx) => (
-                              <div key={aIdx} className="p-3 bg-blue-50/50 border border-blue-200 rounded-xl text-xs space-y-1.5">
-                                <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                                  <span>📌</span>
-                                  <span>{act.action}</span>
-                                </div>
-                                <div className="flex items-center justify-between text-[11px] text-slate-600">
-                                  <span>Assigned: <strong>{act.responsible_person}</strong></span>
-                                  {act.deadline && <span className="text-amber-700 font-semibold">⏳ {act.deadline}</span>}
-                                </div>
-                                <div className="text-[10px] text-slate-400 italic font-mono">
-                                  Source: "{act.source_sentence}"
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="text-xs text-slate-400 italic">No actionable tasks detected in this email.</div>
-                        )}
-                      </div>
-
-                      {/* Deadlines Box */}
-                      <div className="glass-card rounded-2xl p-5 shadow-sm space-y-3">
-                        <h3 className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
-                          <span>⏰</span>
-                          <span>Temporal Deadlines & Normalized Dates</span>
-                        </h3>
-                        {selectedEmail.deadlines && selectedEmail.deadlines.length > 0 ? (
-                          <div className="space-y-1.5">
-                            {selectedEmail.deadlines.map((dl, dIdx) => (
-                              <div key={dIdx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs flex items-center justify-between">
-                                <span className="font-semibold text-slate-800">⏳ {dl.raw}</span>
-                                <span className="font-mono text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded">
-                                  {dl.normalized || dl.raw}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="text-xs text-slate-400 italic">No explicit date or time constraint found.</div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* 4. CONVERSATION VIEW PAGE */}
-                {activeTab === "conversations" && (
-                  <div className="space-y-6">
-                    <div>
-                      <h2 className="text-lg font-bold text-slate-900">Grouped Email Conversations</h2>
-                      <p className="text-xs text-slate-500">Threads clustered via subject normalization, participant matching, and TF-IDF body similarity</p>
-                    </div>
-
-                    <div className="space-y-6">
-                      {dashboardData?.conversations?.map((conv, cIdx) => (
-                        <div key={cIdx} className="glass-card rounded-2xl shadow-sm p-5 border border-slate-200 space-y-4">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <h3 className="font-bold text-base text-slate-900">{conv.subject}</h3>
-                                <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded">
-                                  {conv.num_emails} Messages
-                                </span>
-                              </div>
-                              <div className="text-xs text-slate-500 mt-1">
-                                <strong>Participants:</strong> {conv.participants?.join(", ") || "Various"}
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Thread Summary */}
-                          <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-xs text-slate-700">
-                            <div className="font-bold text-slate-800 text-[11px] uppercase tracking-wider mb-1">
-                              Conversation Summary & Key Decisions:
-                            </div>
-                            <p className="leading-relaxed">{conv.summary}</p>
-                          </div>
-
-                          {/* Chronological Message Stack */}
-                          <div className="space-y-3 pt-2">
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Messages in Thread (Chronological)</div>
-                            {conv.emails?.map((msg, mIdx) => (
-                              <div key={mIdx} className="p-3.5 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-sm">
-                                <div className="flex items-center justify-between text-xs">
-                                  <span className="font-bold text-slate-800">{msg.sender}</span>
-                                  <span className="font-mono text-slate-400 text-[11px]">{msg.timestamp || `Message ${mIdx+1}`}</span>
-                                </div>
-                                <p className="text-xs text-slate-700 whitespace-pre-wrap leading-relaxed">{msg.body}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 5. PERSONALIZED DAILY SUMMARY PAGE */}
-                {activeTab === "summary" && (
-                  <div className="glass-card rounded-2xl shadow-sm p-6 space-y-6">
-                    <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-                      <div>
-                        <h2 className="text-xl font-bold text-slate-900">Personalized Executive Daily Briefing</h2>
-                        <p className="text-xs text-slate-500">Synthesized daily digest prioritized according to your VIP preferences</p>
-                      </div>
-                      <button
-                        onClick={async () => {
-                          const res = await fetch(`${API_BASE}/api/daily-summary/generate`, { method: "POST" });
-                          if (res.ok) {
-                            alert("Daily summary re-generated with latest ranking!");
-                            await fetchDashboard();
-                          }
-                        }}
-                        className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow-sm"
-                      >
-                        <span>🔄</span>
-                        <span>Generate Fresh Briefing</span>
-                      </button>
-                    </div>
-
-                    {/* Formatted Markdown Box */}
-                    <div className="bg-slate-900 text-slate-100 p-6 rounded-2xl font-mono text-xs leading-relaxed whitespace-pre-line shadow-inner border border-slate-800">
-                      {dashboardData?.daily_summary?.briefing_markdown}
-                    </div>
-                  </div>
-                )}
-
-                {/* 6. USER PREFERENCES PAGE */}
-                {activeTab === "preferences" && preferences && (
-                  <div className="glass-card rounded-2xl shadow-sm p-6 space-y-6 max-w-4xl mx-auto">
-                    <div>
-                      <h2 className="text-xl font-bold text-slate-900">User Preferences & Executive Profile</h2>
-                      <p className="text-xs text-slate-500">Configure your VIP contacts, critical topics, and priority thresholds to dynamically tune email scoring</p>
-                    </div>
-
-                    <div className="space-y-5">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Your Name</label>
-                          <input
-                            type="text"
-                            value={preferences.user_name || ""}
-                            onChange={(e) => setPreferences({ ...preferences, user_name: e.target.value })}
-                            className="w-full px-3 py-2 bg-slate-100 rounded-xl text-xs border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Your Role / Title</label>
-                          <input
-                            type="text"
-                            value={preferences.user_role || ""}
-                            onChange={(e) => setPreferences({ ...preferences, user_role: e.target.value })}
-                            className="w-full px-3 py-2 bg-slate-100 rounded-xl text-xs border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                          Important VIP Senders (comma-separated)
-                        </label>
-                        <textarea
-                          rows="3"
-                          value={preferences.important_senders?.join(", ") || ""}
-                          onChange={(e) => setPreferences({
-                            ...preferences,
-                            important_senders: e.target.value.split(",").map(s => s.trim()).filter(Boolean)
-                          })}
-                          className="w-full px-3 py-2 bg-slate-100 rounded-xl text-xs border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
-                        />
-                        <p className="text-[11px] text-slate-400 mt-1">Emails from these senders receive a priority boost (+0.30) in your inbox and daily digest.</p>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                          Priority Topics & Keywords (comma-separated)
-                        </label>
-                        <textarea
-                          rows="3"
-                          value={preferences.priority_topics?.join(", ") || ""}
-                          onChange={(e) => setPreferences({
-                            ...preferences,
-                            priority_topics: e.target.value.split(",").map(s => s.trim()).filter(Boolean)
-                          })}
-                          className="w-full px-3 py-2 bg-slate-100 rounded-xl text-xs border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
-                        />
-                        <p className="text-[11px] text-slate-400 mt-1">Keywords that trigger automatic highlighting and inclusion in the executive briefing.</p>
-                      </div>
-
-                      <div className="pt-4 border-t border-slate-200 flex justify-end">
-                        <button
-                          onClick={() => handleSavePreferences(preferences)}
-                          className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-5 py-2.5 rounded-xl text-xs shadow-md transition-all"
-                        >
-                          Save & Apply Preferences
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </main>
-
-          {/* Modal: Live Demonstration & Input Dialog */}
-          {isModalOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-              <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-2xl w-full p-6 space-y-5 animate-in fade-in duration-200">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">✨</span>
-                    <h3 className="font-bold text-base text-slate-900">Live Demonstration & Email Analysis</h3>
-                  </div>
-                  <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 font-bold text-lg">×</button>
-                </div>
-
-                {/* Sub-tabs inside modal */}
-                <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
-                  <button
-                    onClick={() => setModalMode("manual")}
-                    className={`flex-1 py-1.5 rounded-lg transition-all ${modalMode === "manual" ? "bg-white shadow-sm text-blue-600" : "text-slate-600"}`}
-                  >
-                    ✏️ Manual Entry
-                  </button>
-                  <button
-                    onClick={() => setModalMode("sample")}
-                    className={`flex-1 py-1.5 rounded-lg transition-all ${modalMode === "sample" ? "bg-white shadow-sm text-blue-600" : "text-slate-600"}`}
-                  >
-                    📚 Preloaded Samples (15)
-                  </button>
-                  <button
-                    onClick={() => setModalMode("upload")}
-                    className={`flex-1 py-1.5 rounded-lg transition-all ${modalMode === "upload" ? "bg-white shadow-sm text-blue-600" : "text-slate-600"}`}
-                  >
-                    📁 Upload File (.txt / .eml)
-                  </button>
-                </div>
-
-                {/* Manual Mode Form */}
-                {modalMode === "manual" && (
-                  <form onSubmit={handleAnalyzeManual} className="space-y-3.5">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1">Sender</label>
-                        <input
-                          type="text"
-                          value={demoSender}
-                          onChange={(e) => setDemoSender(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs"
-                          placeholder="e.g. cto@company.com"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1">Recipient</label>
-                        <input
-                          type="text"
-                          value={demoReceiver}
-                          onChange={(e) => setDemoReceiver(e.target.value)}
-                          className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs"
-                          placeholder="e.g. John Smith"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1">Subject</label>
-                      <input
-                        type="text"
-                        value={demoSubject}
-                        onChange={(e) => setDemoSubject(e.target.value)}
-                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs"
-                        placeholder="e.g. URGENT: Production database failure"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1">Body</label>
-                      <textarea
-                        rows="5"
-                        value={demoBody}
-                        onChange={(e) => setDemoBody(e.target.value)}
-                        className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs"
-                        placeholder="Type or paste incoming email content..."
-                        required
-                      />
-                    </div>
-                    <div className="flex justify-end gap-2 pt-2">
-                      <button
-                        type="button"
-                        onClick={() => setIsModalOpen(false)}
-                        className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        disabled={analyzing}
-                        className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5"
-                      >
-                        {analyzing ? "Analyzing with NLP..." : "Run Live NLP Pipeline"}
-                      </button>
-                    </div>
-                  </form>
-                )}
-
-                {/* Sample Mode Picker */}
-                {modalMode === "sample" && (
-                  <div className="space-y-3">
-                    <p className="text-xs text-slate-500">Select an authentic email from our downloaded datasets (Enron & Customer Care):</p>
-                    <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
-                      {sampleList.map((sample, sIdx) => (
-                        <div
-                          key={sIdx}
-                          onClick={() => { handlePickSample(sample); setModalMode("manual"); }}
-                          className="p-3 bg-slate-50 border border-slate-200 rounded-xl hover:bg-blue-50/50 hover:border-blue-300 cursor-pointer transition-all text-xs"
-                        >
-                          <div className="font-semibold text-slate-900">{sample.subject}</div>
-                          <div className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{sample.body}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Upload Mode File Picker */}
-                {modalMode === "upload" && (
-                  <div className="py-8 text-center border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50 p-6 space-y-3">
-                    <div className="text-4xl">📄</div>
-                    <div className="text-sm font-semibold text-slate-800">Upload Email File (.txt, .eml)</div>
-                    <p className="text-xs text-slate-500">The NLP preprocessor will parse headers, clean noise, and run full analysis.</p>
-                    <input
-                      type="file"
-                      accept=".txt,.eml"
-                      onChange={handleFileUpload}
-                      className="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+  return (
+    <div className="nlp-section">
+      {/* Urgency Card */}
+      <div className="nlp-card">
+        <div className="nlp-header" onClick={()=>tog("urgency")}>
+          <span>🎯</span><h4>Urgency Analysis</h4>
+          <span className={`priority-badge ${pbClass(prio)}`}>{prio}</span>
+          <span className="chevron" style={{transform:open.urgency?"rotate(180deg)":""}}>▼</span>
         </div>
-      );
+        {open.urgency&&<div className="nlp-body">
+          <div className="conf-gauge-wrap">
+            <ConfGauge pct={conf} color={color}/>
+            <div style={{flex:1}}>
+              <div style={{fontSize:13,fontWeight:600,color:"var(--txt-primary)",marginBottom:4}}>
+                Classified as <span style={{color}}>{prio}</span>
+              </div>
+              <div style={{fontSize:12,color:"var(--txt-muted)",marginBottom:6}}>
+                Model: {u.model_name||"TF-IDF Ensemble"}
+              </div>
+              <div style={{height:7,borderRadius:999,background:"var(--border)",overflow:"hidden"}}>
+                <div style={{width:conf+"%",height:"100%",background:color,borderRadius:999,transition:"width 1s ease"}}/>
+              </div>
+            </div>
+          </div>
+        </div>}
+      </div>
+
+      {/* Explainability Drawer */}
+      <div className="nlp-card">
+        <div className="nlp-header" onClick={()=>tog("explain")}>
+          <span>🔬</span>
+          <h4>Why {prio}? — AI Explanation</h4>
+          <span className="chevron" style={{transform:open.explain?"rotate(180deg)":""}}>▼</span>
+        </div>
+        {open.explain&&<div className="nlp-body">
+          {signals.length>0?(
+            signals.map((s,i)=>(
+              <div key={i} className="signal-row">
+                <span className="signal-name">{s.signal}</span>
+                <span className={`signal-weight ${s.weight>=0?"signal-pos":"signal-neg"}`}>
+                  {s.weight>=0?"+":""}{s.weight?.toFixed(2)}
+                </span>
+              </div>
+            ))
+          ):(
+            (u.signals||[]).map((s,i)=>(
+              <div key={i} className="signal-row">
+                <span className="signal-name">{s}</span>
+                <span className={`signal-weight ${s.includes("Critical")||s.includes("High")||s.includes("VIP")?"signal-pos":"signal-neg"}`}>
+                  {s.includes("Critical")?"+0.35":s.includes("High")||s.includes("Pattern")?"+0.25":s.includes("VIP")?"+0.30":"-0.10"}
+                </span>
+              </div>
+            ))
+          )}
+          {signals.length===0&&(u.signals||[]).length===0&&
+            <p style={{fontSize:13,color:"var(--txt-muted)"}}>No signals detected — classified by TF-IDF model features.</p>}
+          <div style={{marginTop:12,padding:"10px 12px",background:"var(--surface2)",borderRadius:"var(--radius-md)",fontSize:12,color:"var(--txt-muted)"}}>
+            Probabilities: {Object.entries(u.probabilities||{}).map(([k,v])=>`${k.toUpperCase()} ${Math.round(v*100)}%`).join(" · ")}
+          </div>
+        </div>}
+      </div>
+
+      {/* Action Items */}
+      <div className="nlp-card">
+        <div className="nlp-header" onClick={()=>tog("actions")}>
+          <span>✅</span><h4>Action Items ({actions.length})</h4>
+          <span className="chevron" style={{transform:open.actions?"rotate(180deg)":""}}>▼</span>
+        </div>
+        {open.actions&&<div className="nlp-body"><ActionChecklist actions={actions}/></div>}
+      </div>
+
+      {/* Deadlines with Explicit Tasks to Complete */}
+      <div className="nlp-card">
+        <div className="nlp-header" onClick={()=>tog("deadlines")}>
+          <span>📅</span><h4>Deadlines &amp; Dates ({deadlines.length})</h4>
+          <span className="chevron" style={{transform:open.deadlines?"rotate(180deg)":""}}>▼</span>
+        </div>
+        {open.deadlines&&<div className="nlp-body">
+          {deadlines.length===0
+            ?<p style={{fontSize:13,color:"var(--txt-muted)"}}>No deadlines detected.</p>
+            :<div style={{display:"flex",flexDirection:"column",gap:8}}>
+              {deadlines.map((d,i)=>{
+                const cd=deadlineCountdown(d.normalized||d.normalized_date);
+                const task=d.task || (email.action_items && email.action_items[i] ? email.action_items[i].action : (email.action_items && email.action_items[0] ? email.action_items[0].action : null));
+                return (
+                  <div key={i} style={{display:"flex",alignItems:"flex-start",gap:10,padding:"10px 12px",background:"var(--surface2)",borderRadius:"var(--radius-md)",border:"1px solid var(--border)"}}>
+                    <span className={`deadline-chip ${cd?cd.cls:"dc-normal"}`} style={{margin:0,flexShrink:0}}>
+                      📅 {cd?cd.label:(d.raw||d.text||String(d))}
+                    </span>
+                    <div style={{flex:1}}>
+                      {task ? (
+                        <div style={{fontSize:13,color:"var(--txt-primary)",lineHeight:1.45}}>
+                          <span style={{color:"var(--txt-muted)",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:".05em",display:"block",marginBottom:2}}>Task to complete before deadline:</span>
+                          <strong>{task}</strong>
+                        </div>
+                      ) : (
+                        <div style={{fontSize:12.5,color:"var(--txt-muted)",lineHeight:1.45}}>
+                          <span style={{fontSize:11,fontWeight:600,textTransform:"uppercase",letterSpacing:".04em",display:"block",marginBottom:2}}>Reference context:</span>
+                          "{d.raw||d.text||'Specified deadline'}"
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>}
+        </div>}
+      </div>
+
+      {/* Executive Brief */}
+      {brief.tldr&&<div className="nlp-card">
+        <div className="nlp-header" onClick={()=>tog("brief")}>
+          <span>📌</span><h4>Executive Brief</h4>
+          <span className="chevron" style={{transform:open.brief?"rotate(180deg)":""}}>▼</span>
+        </div>
+        {open.brief&&<div className="nlp-body">
+          <div className="exec-brief">
+            <div className="eb-title">AI Structured Summary</div>
+            <div className="eb-row">
+              <span className="eb-icon">📌</span>
+              <span className="eb-label">TL;DR</span>
+              <span className="eb-text">{brief.tldr}</span>
+            </div>
+            {brief.key_decision&&<div className="eb-row" style={{marginTop:8}}>
+              <span className="eb-icon">⚡</span>
+              <span className="eb-label">Key Issue</span>
+              <span className="eb-text">{brief.key_decision}</span>
+            </div>}
+            {brief.next_steps&&<div className="eb-row" style={{marginTop:8}}>
+              <span className="eb-icon">🎯</span>
+              <span className="eb-label">Next Steps</span>
+              <span className="eb-text">{brief.next_steps}</span>
+            </div>}
+          </div>
+        </div>}
+      </div>}
+
+      {/* Category */}
+      <div className="nlp-card">
+        <div className="nlp-header" onClick={()=>tog("category")}>
+          <span>🏷️</span><h4>Email Category</h4>
+          <span className="chevron" style={{transform:open.category?"rotate(180deg)":""}}>▼</span>
+        </div>
+        {open.category&&<div className="nlp-body">
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+            <span style={{fontSize:22}}>{cat.icon||"📧"}</span>
+            <div>
+              <div style={{fontSize:14,fontWeight:700,color:cat.color||"var(--txt-primary)"}}>{cat.category_label||cat.category||"GENERAL"}</div>
+              <div style={{fontSize:11.5,color:"var(--txt-muted)"}}>{Math.round((cat.confidence||0)*100)}% confidence</div>
+            </div>
+          </div>
+        </div>}
+      </div>
+
+      {/* AI Summary */}
+      {sum&&<div className="nlp-card">
+        <div className="nlp-header" onClick={()=>tog("summary")}>
+          <span>📝</span><h4>AI Summary</h4>
+          <span className="chevron" style={{transform:open.summary?"rotate(180deg)":""}}>▼</span>
+        </div>
+        {open.summary&&<div className="nlp-body">
+          <p style={{fontSize:13.5,color:"var(--txt-primary)",lineHeight:1.65}}>{sum}</p>
+        </div>}
+      </div>}
+    </div>
+  );
+}
+
+// ── Reading Pane ─────────────────────────────────────────────────────────────
+function ReadingPane({email,onReply}){
+  if(!email) return (
+    <div className="reading-pane empty">
+      <div className="ei">📬</div>
+      <p>Select an email to read</p>
+      <div className="hint">Use J / K keys to navigate · / to search</div>
+    </div>
+  );
+  const prio=email.urgency?.priority||"LOW";
+  const cat=email.category||{};
+  const isCritical=prio==="CRITICAL";
+
+  return (
+    <div className="reading-pane">
+      <div className="email-detail">
+        <div className={`detail-subject ${isCritical?"glow-critical":""}`} style={{borderRadius:isCritical?8:0,padding:isCritical?"12px":0}}>
+          {email.subject||"(No Subject)"}
+        </div>
+        <div className="detail-meta" style={{marginTop:14}}>
+          <div className="meta-av">{initials(email.sender)}</div>
+          <div className="meta-info">
+            <div className="meta-from">{email.sender||"Unknown"}</div>
+            <div className="meta-to">to {email.receiver||"me"}</div>
+          </div>
+          <div className="meta-time">{formatTime(email.timestamp)}</div>
+        </div>
+        <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap"}}>
+          <span className={`priority-badge ${pbClass(prio)}`}>
+            {isCritical&&<span style={{animation:"pulse-anim 1.5s infinite"}}>🚨</span>} {prio}
+          </span>
+          {cat.icon&&<span style={{fontSize:13,color:cat.color,fontWeight:500,display:"flex",alignItems:"center",gap:4}}>{cat.icon} {cat.category_label||cat.category}</span>}
+        </div>
+
+        <div className="detail-actions" style={{marginBottom:16}}>
+          <button className="d-btn primary" onClick={()=>onReply(email)}>↩ Reply</button>
+          <button className="d-btn" onClick={()=>onReply(email,"forward")}>→ Forward</button>
+        </div>
+
+        <div className="email-body-text">{email.body||"(Empty message)"}</div>
+        <NLPPanel email={email}/>
+      </div>
+    </div>
+  );
+}
+
+// ── Email Row ────────────────────────────────────────────────────────────────
+function EmailRow({email,selected,onClick}){
+  const prio=email.urgency?.priority||"LOW";
+  const cat=email.category||{};
+  const unread=email.unread!==false&&!email._read;
+  return (
+    <div className={`email-row ${selected?"selected":""} ${unread?"unread":""}`} onClick={onClick}>
+      <div className="prio-stripe" style={{background:pColor(prio)}}/>
+      <div className="row-body">
+        <div className="row-top">
+          <span className="row-sender">{email.sender||"Unknown"}</span>
+          <span className="row-time">{formatTime(email.timestamp)}</span>
+        </div>
+        <div className="row-subject">{email.subject||"(No Subject)"}</div>
+        <div className="row-snippet">{snippet(email.body)}</div>
+        <div className="row-tags">
+          <span className={`rtag ${pClass(prio)}`}>{prio}</span>
+          {cat.icon&&<span className="rtag rtag-cat">{cat.icon} {cat.category}</span>}
+          {(email.action_items||[]).length>0&&<span className="rtag rtag-actions">✅ {email.action_items.length}</span>}
+          {(email.deadlines||[]).length>0&&<span className="rtag rtag-deadline">📅</span>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Compose Modal ────────────────────────────────────────────────────────────
+function ComposeModal({open,onClose,prefill,onSentSuccess}){
+  const blank={to:"",subject:"",body:"",recipient_name:"",email_purpose:"",tone:"",user_name:"",additional_context:""};
+  const [fields,setFields]=useState(blank);
+  const [loading,setLoading]=useState(false);
+  const [status,setStatus]=useState(null);
+
+  useEffect(()=>{
+    if(open) setFields({...blank,...(prefill||{})});
+    else setStatus(null);
+  },[open,JSON.stringify(prefill)]);
+
+  const setF=k=>e=>setFields(f=>({...f,[k]:e.target.value}));
+
+  const aiGenerate=async()=>{
+    if(!fields.email_purpose&&!fields.body){alert("Enter a prompt in the AI bar first.");return}
+    setLoading(true);setStatus(null);
+    try{
+      const r=await fetch(`${API}/api/compose`,{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({recipient_name:fields.recipient_name,email_purpose:fields.email_purpose||fields.body,
+          tone:fields.tone,user_name:fields.user_name,topic_keywords:fields.subject,additional_context:fields.additional_context})});
+      const d=await r.json();
+      setFields(f=>({...f,subject:d.subject||f.subject,body:d.body||f.body}));
+      setStatus({type:"info",text:"✨ AI draft ready — review and send!"});
+    }catch(e){alert("AI generation failed: "+e.message)}
+    setLoading(false);
+  };
+
+  const handleSend=()=>{
+    if(!fields.to||!fields.to.includes("@")){alert("Please enter a valid recipient email.");return}
+    const url=`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(fields.to)}&su=${encodeURIComponent(fields.subject||"")}&body=${encodeURIComponent(fields.body||"")}`;
+    window.open(url,"_blank");
+    fetch(`${API}/api/send`,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({to:fields.to,subject:fields.subject,body:fields.body,from_email:"Me",app_password:"gmail_web_dispatch"})
+    }).then(r=>r.json()).then(d=>{if(onSentSuccess)onSentSuccess(d)}).catch(()=>{});
+    onClose();
+  };
+
+  if(!open) return null;
+  return (
+    <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
+      <div className="compose-modal open">
+        <div className="modal-hd">
+          <h3>✏️ New Message</h3>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+        {status&&<div className={`modal-status ms-${status.type}`}><span>{status.text}</span><button style={{background:"none",border:"none",cursor:"pointer",marginLeft:"auto",color:"inherit"}} onClick={()=>setStatus(null)}>×</button></div>}
+        <div className="compose-row">
+          <span className="compose-label">To</span>
+          <input className="compose-input" value={fields.to} onChange={setF("to")} placeholder="recipient@gmail.com" autoFocus/>
+        </div>
+        <div className="compose-row">
+          <span className="compose-label">Subject</span>
+          <input className="compose-input" value={fields.subject} onChange={setF("subject")} placeholder="Subject line"/>
+        </div>
+        {/* Reply draft toolbar / blank toggle */}
+        {prefill?.quoted_only && (
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 18px",background:"var(--surface2)",borderBottom:"1px solid var(--border2)",fontSize:12}}>
+            <span style={{color:"var(--txt-muted)",display:"flex",alignItems:"center",gap:5}}>
+              <span>💡</span>
+              {fields.body&&fields.body.includes(prefill.draft_only||"__none__") ? "Contextual reply draft pre-filled" : "Reply draft"}
+            </span>
+            <div style={{display:"flex",gap:6}}>
+              {prefill.draft_only && (
+                <button type="button" className="d-btn" style={{padding:"3px 10px",fontSize:11.5}}
+                  onClick={()=>setFields(f=>({...f,body:(prefill.draft_only+"\n\n"+prefill.quoted_only)}))}>
+                  ✨ Context Draft
+                </button>
+              )}
+              <button type="button" className="d-btn" style={{padding:"3px 10px",fontSize:11.5}}
+                onClick={()=>setFields(f=>({...f,body:prefill.quoted_only||""}))}>
+                ◻️ Leave Blank
+              </button>
+            </div>
+          </div>
+        )}
+        <div className="ai-bar">
+          <span style={{fontSize:15}}>✨</span>
+          <input className="ai-input" value={fields.email_purpose} onChange={setF("email_purpose")}
+            placeholder="Ask AI to draft… e.g. Request budget approval from CFO before Friday"
+            onKeyDown={e=>e.key==="Enter"&&aiGenerate()}/>
+          <button className="ai-draft-btn" onClick={aiGenerate} disabled={loading}>
+            {loading?<><span className="spinner" style={{width:13,height:13}}/> Drafting…</>:"✨ Draft"}
+          </button>
+        </div>
+        <textarea className="compose-body" value={fields.body} onChange={setF("body")}
+          placeholder="Write your message here, or use the AI bar above to draft instantly…"/>
+        <div className="modal-footer">
+          <button className="send-gmail-btn" onClick={handleSend}>
+            <span>📤</span> Send via Gmail
+          </button>
+          <span style={{fontSize:11.5,color:"var(--txt-muted)"}}>Opens Gmail with pre-filled content</span>
+          <button className="discard-btn" onClick={onClose} title="Discard">🗑</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Analyze Modal ─────────────────────────────────────────────────────────────
+function AnalyzeModal({onClose,onResult}){
+  const [subject,setSubject]=useState("");
+  const [body,setBody]=useState("");
+  const [sender,setSender]=useState("");
+  const [loading,setLoading]=useState(false);
+  const [result,setResult]=useState(null);
+  const [file,setFile]=useState(null);
+  const fileRef=useRef();
+
+  const analyze=async()=>{
+    if(!body.trim()&&!file){alert("Please enter email body or upload a file.");return}
+    setLoading(true);setResult(null);
+    try{
+      let data;
+      if(file){
+        const fd=new FormData();fd.append("file",file);
+        const r=await fetch(`${API}/api/upload`,{method:"POST",body:fd});
+        data=await r.json();
+      }else{
+        const r=await fetch(`${API}/api/analyze`,{method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({subject,body,sender,receiver:"Me",timestamp:new Date().toISOString()})});
+        data=await r.json();
+      }
+      setResult(data);onResult(data);
+    }catch(e){alert("Analysis failed: "+e.message)}
+    setLoading(false);
+  };
+
+  const prio=result?.urgency?.priority;
+  return (
+    <div className="amodal" onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
+      <div className="amodal-box">
+        <div className="amodal-hd">
+          <h2>🔍 Analyze Email</h2>
+          <p>Paste email content or upload a .txt / .eml file for instant NLP analysis.</p>
+        </div>
+        <div className="amodal-body">
+          {!result&&<>
+            <div className="upload-zone" onClick={()=>fileRef.current.click()}>
+              <input type="file" ref={fileRef} accept=".txt,.eml" onChange={e=>setFile(e.target.files[0])}/>
+              <div style={{fontSize:32,marginBottom:8}}>📎</div>
+              <div style={{fontSize:13.5,color:"var(--txt-muted)"}}>{file?file.name:"Drop a .txt or .eml file, or click to browse"}</div>
+            </div>
+            {!file&&<>
+              <div className="modal-field"><label>From</label><input value={sender} onChange={e=>setSender(e.target.value)} placeholder="sender@example.com"/></div>
+              <div className="modal-field"><label>Subject</label><input value={subject} onChange={e=>setSubject(e.target.value)} placeholder="Email subject…"/></div>
+              <div className="modal-field"><label>Body</label><textarea value={body} onChange={e=>setBody(e.target.value)} placeholder="Paste email body here…"/></div>
+            </>}
+          </>}
+          {result&&<div>
+            <div style={{display:"flex",gap:8,marginBottom:14,flexWrap:"wrap"}}>
+              {prio&&<span className="res-pill" style={{background:pColor(prio)}}>{prio}</span>}
+              {result.category&&<span style={{fontSize:14}}>{result.category.icon} {result.category.category_label||result.category.category}</span>}
+            </div>
+            <NLPPanel email={result}/>
+            <div style={{display:"flex",gap:8,marginTop:14}}>
+              <button className="btn-analyze" onClick={()=>onClose()} style={{flex:1}}>📬 View in Reading Pane</button>
+              <button className="btn-cancel" onClick={()=>{setResult(null);setFile(null);setSubject("");setBody("");setSender("")}}>← Analyze Another</button>
+            </div>
+          </div>}
+        </div>
+        <div className="amodal-footer">
+          <button className="btn-cancel" onClick={onClose}>Close</button>
+          {!result&&<button className="btn-analyze" onClick={analyze} disabled={loading}>
+            {loading?<><span className="spinner" style={{width:14,height:14}}/> Analyzing…</>:"🔍 Analyze"}
+          </button>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Dashboard View ────────────────────────────────────────────────────────────
+function DashboardView({stats,briefing}){
+  const cards=[
+    {label:"Total Emails",value:stats?.total||0,icon:"📧",color:"var(--blue)"},
+    {label:"Critical",value:stats?.critical||0,icon:"🔴",color:"var(--red)"},
+    {label:"High Priority",value:stats?.high||0,icon:"🟠",color:"var(--orange)"},
+    {label:"Medium",value:stats?.medium||0,icon:"🔵",color:"var(--blue)"},
+    {label:"Low",value:stats?.low||0,icon:"🟢",color:"var(--green)"},
+    {label:"Spam Detected",value:stats?.spam||0,icon:"🚫",color:"var(--txt-muted)"},
+    {label:"Action Items",value:stats?.action_items||0,icon:"✅",color:"var(--purple)"},
+    {label:"Deadlines",value:stats?.deadlines||0,icon:"📅",color:"var(--orange)"},
+    {label:"Conversations",value:stats?.conversations_count||0,icon:"💬",color:"var(--cyan)"},
+  ];
+  const topDeadlines=(briefing?.upcoming_deadlines||briefing?.top_upcoming_deadlines||[]).slice(0,5);
+  const topActions=(briefing?.pending_action_items||briefing?.top_action_items||[]).slice(0,5);
+
+  return (
+    <div className="dash-wrap">
+      <div className="dash-heading">Executive Dashboard</div>
+      <div className="dash-sub">Good day! Here is your personalized email intelligence briefing.</div>
+      <div className="model-banner">
+        <span>🤖</span>
+        <span style={{fontWeight:700}}>AI Engine:</span>
+        Soft-Voting Ensemble (LinearSVC + LogReg) · 90.71% Accuracy · TF-IDF 1-3 n-grams
+        <span style={{marginLeft:4,background:"var(--green)",color:"#fff",borderRadius:999,padding:"1px 7px",fontSize:10,fontWeight:700}}>↑ Upgraded</span>
+      </div>
+      <div className="stat-grid">
+        {cards.map(c=>(
+          <div key={c.label} className="stat-card">
+            <div className="stat-icon">{c.icon}</div>
+            <div className="stat-val" style={{color:c.color}}>{c.value}</div>
+            <div className="stat-label">{c.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+        <div>
+          <div className="section-hd">✅ Top Action Items</div>
+          <div className="briefing-card">
+            {topActions.length===0
+              ?<p style={{fontSize:13,color:"var(--txt-muted)"}}>No action items.</p>
+              :topActions.map((a,i)=><div key={i} className="bl-row">
+                <span className="bl-dot">•</span>
+                <span>{typeof a==="string"?a:(a.action||a.text||JSON.stringify(a))}</span>
+              </div>)}
+          </div>
+        </div>
+        <div>
+          <div className="section-hd">📅 Upcoming Deadlines &amp; Associated Tasks</div>
+          <div className="briefing-card">
+            {topDeadlines.length===0
+              ?<p style={{fontSize:13,color:"var(--txt-muted)"}}>No upcoming deadlines.</p>
+              :topDeadlines.map((d,i)=>{
+                const txt=typeof d==="string"?d:(d.deadline||d.text||d.normalized_date||d.raw||JSON.stringify(d));
+                const subj=typeof d==="object"?d.email_subject:"";
+                const task=typeof d==="object"?(d.task||d.action):null;
+                const cleanDeadline=typeof txt==="string"?txt.replace(/^\{.*?"deadline":\s*"/,"").replace(/".*$/,""):txt;
+                return (
+                  <div key={i} className="bl-row" style={{alignItems:"flex-start"}}>
+                    <span className="bl-dot">•</span>
+                    <div style={{flex:1}}>
+                      <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
+                        <span style={{fontWeight:600,color:"var(--orange)",fontSize:13}}>📅 {cleanDeadline}</span>
+                        {subj&&<span style={{color:"var(--txt-muted)",fontSize:12}}>— {subj}</span>}
+                      </div>
+                      {task&&<div style={{fontSize:12.5,color:"var(--txt-primary)",marginTop:3}}>
+                        <span style={{color:"var(--txt-muted)",fontWeight:700,fontSize:10.5,textTransform:"uppercase",letterSpacing:".05em"}}>Task to complete: </span>
+                        <strong>{task}</strong>
+                      </div>}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Model Analytics View ──────────────────────────────────────────────────────
+function AnalyticsView(){
+  const benchmarks=[
+    {name:"Soft-Voting Ensemble (LinearSVC + LogReg)",acc:90.71,f1:89.86,winner:true},
+    {name:"Calibrated LinearSVC (C=1.5)",acc:90.49,f1:89.68,winner:false},
+    {name:"Logistic Regression (C=2.0)",acc:88.94,f1:88.14,winner:false},
+    {name:"Multinomial Naive Bayes (α=0.5)",acc:84.96,f1:83.69,winner:false},
+  ];
+  const perClass=[
+    {cls:"HIGH",prec:96.28,rec:96.79,f1:96.53,color:"#dc2626"},
+    {cls:"MEDIUM",prec:86.51,rec:81.95,f1:84.17,color:"#d97706"},
+    {cls:"LOW",prec:86.96,rec:90.91,f1:88.89,color:"#059669"},
+  ];
+  const datasets=[
+    {name:"Customer Care Emails",use:"Urgency Classification",count:"2,259 emails",color:"#2563eb"},
+    {name:"EPA Dataset",use:"Action Item Extraction",count:"6,734 annotations",color:"#7c3aed"},
+    {name:"Enron Corpus",use:"Category & Spam Detection",count:"30,000+ emails",color:"#059669"},
+    {name:"Email Thread Summary",use:"Conversation Summarization",count:"4,167 threads",color:"#d97706"},
+    {name:"EmailSum Dataset",use:"Summarization Benchmarking",count:"2,549 threads",color:"#dc2626"},
+  ];
+  const rouge=[
+    {name:"ROUGE-1 Recall",val:44.52},
+    {name:"ROUGE-1 F1",val:19.56},
+    {name:"ROUGE-2 Recall",val:14.68},
+    {name:"ROUGE-L Recall",val:26.22},
+  ];
+
+  return (
+    <div className="analytics-wrap">
+      <div className="dash-heading">📊 Model Analytics &amp; Benchmarks</div>
+      <div className="dash-sub">Live evaluation results for all 6 NLP capabilities — in-app, no JSON files needed.</div>
+
+      <div className="analytics-grid">
+        {/* Benchmark Card */}
+        <div className="analytics-card">
+          <div className="ac-title">🏆 Urgency Classification — Model Comparison</div>
+          {benchmarks.map((b,i)=>(
+            <div key={i} className="benchmark-row">
+              <span className={`bm-name ${b.winner?"winner":""}`}>
+                {b.winner&&<span className="bm-crown">👑</span>}{b.name}
+              </span>
+              <div className="bm-bar-wrap">
+                <div className="bm-bar" style={{width:b.acc+"%",background:b.winner?"linear-gradient(90deg,#2563eb,#7c3aed)":"var(--border)"}}/>
+              </div>
+              <span className="bm-pct" style={{color:b.winner?"var(--blue)":"var(--txt-primary)"}}>{b.acc}%</span>
+            </div>
+          ))}
+          <div style={{marginTop:12,fontSize:12,color:"var(--txt-muted)",padding:"8px 10px",background:"var(--surface2)",borderRadius:"var(--radius-md)"}}>
+            Training: 1,807 samples | Test: 452 samples | Stratified 80/20 split · Customer Care Dataset
+          </div>
+        </div>
+
+        {/* Per-Class Performance */}
+        <div className="analytics-card">
+          <div className="ac-title">📈 Per-Class Performance (Winning Ensemble)</div>
+          {perClass.map((c,i)=>(
+            <div key={i} className="per-class-row">
+              <span className="pc-class" style={{color:c.color}}>{c.cls}</span>
+              <div className="pc-metric">
+                <div className="pc-label">Precision</div>
+                <div className="pc-bar-wrap"><div className="pc-bar" style={{width:c.prec+"%",background:c.color}}/></div>
+              </div>
+              <span className="pc-val">{c.prec}%</span>
+              <div className="pc-metric" style={{marginLeft:8}}>
+                <div className="pc-label">F1</div>
+                <div className="pc-bar-wrap"><div className="pc-bar" style={{width:c.f1+"%",background:c.color,opacity:.7}}/></div>
+              </div>
+              <span className="pc-val">{c.f1}%</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Dataset Breakdown */}
+        <div className="analytics-card">
+          <div className="ac-title">📚 Datasets Used Across Pipeline</div>
+          {datasets.map((d,i)=>(
+            <div key={i} className="ds-row">
+              <div className="ds-dot" style={{background:d.color}}/>
+              <span className="ds-name">{d.name}</span>
+              <span className="ds-use">{d.use}</span>
+              <span className="ds-count">{d.count}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* ROUGE Meters */}
+        <div className="analytics-card">
+          <div className="ac-title">📝 Summarization Quality (ROUGE Scores)</div>
+          {rouge.map((r,i)=>(
+            <div key={i} className="rouge-row">
+              <span className="rouge-name">{r.name}</span>
+              <div className="rouge-bar-wrap"><div className="rouge-bar" style={{width:r.val+"%"}}/></div>
+              <span className="rouge-val">{r.val}%</span>
+            </div>
+          ))}
+          <div style={{marginTop:12,padding:"10px 12px",background:"var(--surface2)",borderRadius:"var(--radius-md)"}}>
+            <div style={{fontSize:12,fontWeight:700,color:"var(--txt-muted)",marginBottom:6,textTransform:"uppercase",letterSpacing:".05em"}}>NLP Capabilities</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+              {[["Action Extraction","93.99% F1"],["Thread Grouping","81.74% NMI"],["Category","10 classes"],["Spam Detection","Lexicon Engine"]].map(([n,v])=>(
+                <span key={n} style={{fontSize:11.5,padding:"3px 10px",borderRadius:999,background:"var(--blue-lt)",color:"var(--blue)",fontWeight:500}}>
+                  {n}: <strong>{v}</strong>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Conversations View ────────────────────────────────────────────────────────
+function ConversationsView({conversations}){
+  const [expanded,setExp]=useState({});
+  const tog=id=>setExp(e=>({...e,[id]:!e[id]}));
+  if(!conversations||!conversations.length) return (
+    <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",color:"var(--txt-muted)"}}>
+      <div style={{fontSize:48,marginBottom:12}}>💬</div>
+      <div style={{fontSize:15,fontWeight:600}}>No conversations yet</div>
+    </div>
+  );
+  return (
+    <div className="conv-wrap">
+      <div className="dash-heading" style={{marginBottom:4}}>💬 Conversations</div>
+      <div className="dash-sub" style={{marginBottom:20}}>{conversations.length} conversation threads detected</div>
+      {conversations.map((c,i)=>{
+        const id=c.conversation_id||`conv_${i}`;
+        const emails=c.emails||[];
+        return (
+          <div key={id} className="conv-card">
+            <div className="conv-hd" onClick={()=>tog(id)}>
+              <span style={{fontSize:20}}>🗂</span>
+              <div className="conv-title-row">
+                <div className="conv-title">{c.subject||"Untitled Thread"}</div>
+                <div className="conv-parts">{(c.participants||[]).slice(0,3).join(", ")}</div>
+              </div>
+              <span className="conv-count">{emails.length} email{emails.length!==1?"s":""}</span>
+              <span style={{color:"var(--txt-muted)",fontSize:11,marginLeft:8}}>{expanded[id]?"▲":"▼"}</span>
+            </div>
+            {expanded[id]&&<div className="conv-body">
+              {c.summary&&<div className="conv-summary">📝 {c.summary}</div>}
+              {c.key_points&&c.key_points.length>0&&<div style={{marginBottom:8}}>
+                <strong style={{fontSize:11.5,color:"var(--txt-muted)",textTransform:"uppercase",letterSpacing:".05em"}}>Key Points</strong>
+                <ul style={{marginTop:4,paddingLeft:16}}>
+                  {c.key_points.map((p,j)=><li key={j} style={{fontSize:13,color:"var(--txt-primary)",marginBottom:3}}>{p}</li>)}
+                </ul>
+              </div>}
+              {emails.map((e,j)=>(
+                <div key={j} className="conv-email-row">
+                  <strong>{e.sender}</strong> · {e.subject||"(No Subject)"} · {formatTime(e.timestamp)}
+                </div>
+              ))}
+            </div>}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Preferences View ──────────────────────────────────────────────────────────
+function PreferencesView({prefs,onSave}){
+  const [local,setLocal]=useState(prefs||{vip_senders:[],priority_topics:[],name:"Executive"});
+  const [newVip,setNewVip]=useState("");
+  const [newTopic,setNewTopic]=useState("");
+  const [toast,setToast]=useState(false);
+  useEffect(()=>{if(prefs)setLocal(prefs)},[JSON.stringify(prefs)]);
+  const addVip=()=>{if(newVip.trim()){setLocal(l=>({...l,vip_senders:[...(l.vip_senders||[]),newVip.trim()]}));setNewVip("")}};
+  const addTopic=()=>{if(newTopic.trim()){setLocal(l=>({...l,priority_topics:[...(l.priority_topics||[]),newTopic.trim()]}));setNewTopic("")}};
+  const save=()=>{onSave(local);setToast(true);setTimeout(()=>setToast(false),3000)};
+  return (
+    <div className="prefs-wrap">
+      {toast&&<Toast msg="✓ Preferences saved" onDone={()=>setToast(false)}/>}
+      <div className="dash-heading">⚙️ Preferences</div>
+      <div className="dash-sub" style={{marginBottom:24}}>Personalize how MailMind AI prioritizes your inbox.</div>
+      <div className="pref-card">
+        <h3>👤 Your Profile</h3>
+        <div className="pref-row">
+          <label>Display Name</label>
+          <input value={local.name||""} onChange={e=>setLocal(l=>({...l,name:e.target.value}))} placeholder="Executive"/>
+        </div>
+      </div>
+      <div className="pref-card">
+        <h3>⭐ VIP Senders</h3>
+        <p style={{fontSize:13,color:"var(--txt-muted)",marginBottom:12}}>Emails from these senders get a +0.30 urgency score boost.</p>
+        <div className="pref-tags" style={{marginBottom:10}}>
+          {(local.vip_senders||[]).map(v=><span key={v} className="pref-tag">{v}<button onClick={()=>setLocal(l=>({...l,vip_senders:(l.vip_senders||[]).filter(x=>x!==v)}))}>×</button></span>)}
+        </div>
+        <div style={{display:"flex",gap:8}}>
+          <input style={{flex:1,padding:"7px 12px",border:"1.5px solid var(--border)",borderRadius:"var(--radius-md)",fontSize:13,background:"var(--surface2)",color:"var(--txt-primary)",outline:"none",fontFamily:"var(--font-sans)"}} value={newVip} onChange={e=>setNewVip(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addVip()} placeholder="ceo@company.com"/>
+          <button className="pref-add" onClick={addVip}>+ Add</button>
+        </div>
+      </div>
+      <div className="pref-card">
+        <h3>🏷️ Priority Topics</h3>
+        <p style={{fontSize:13,color:"var(--txt-muted)",marginBottom:12}}>Emails mentioning these topics get a +0.25 urgency boost.</p>
+        <div className="pref-tags" style={{marginBottom:10}}>
+          {(local.priority_topics||[]).map(t=><span key={t} className="pref-tag">{t}<button onClick={()=>setLocal(l=>({...l,priority_topics:(l.priority_topics||[]).filter(x=>x!==t)}))}>×</button></span>)}
+        </div>
+        <div style={{display:"flex",gap:8}}>
+          <input style={{flex:1,padding:"7px 12px",border:"1.5px solid var(--border)",borderRadius:"var(--radius-md)",fontSize:13,background:"var(--surface2)",color:"var(--txt-primary)",outline:"none",fontFamily:"var(--font-sans)"}} value={newTopic} onChange={e=>setNewTopic(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addTopic()} placeholder="budget, deadline, CEO…"/>
+          <button className="pref-add" onClick={addTopic}>+ Add</button>
+        </div>
+      </div>
+      <button className="save-btn" onClick={save}>💾 Save Preferences</button>
+    </div>
+  );
+}
+
+// ── MAIN APP ──────────────────────────────────────────────────────────────────
+function App(){
+  const [view,setView]=useState("inbox");
+  const [dashData,setDashData]=useState(null);
+  const [emails,setEmails]=useState([]);
+  const [conversations,setConversations]=useState([]);
+  const [stats,setStats]=useState({});
+  const [briefing,setBriefing]=useState({});
+  const [prefs,setPrefs]=useState({});
+  const [loading,setLoading]=useState(true);
+  const [selected,setSelected]=useState(null);
+  const [filterPrio,setFilterPrio]=useState("ALL");
+  const [filterCat,setFilterCat]=useState("ALL");
+  const [search,setSearch]=useState("");
+  const [compose,setCompose]=useState(false);
+  const [composePreFill,setComposePreFill]=useState(null);
+  const [showAnalyze,setShowAnalyze]=useState(false);
+  const [toast,setToast]=useState(null);
+  const [connected,setConnected]=useState(null);
+  const [darkMode,setDarkMode]=useState(false);
+  const searchRef=useRef();
+  const priorityFilters=["ALL","CRITICAL","HIGH","MEDIUM","LOW"];
+
+  const showToast=msg=>{setToast(msg);setTimeout(()=>setToast(null),3000)};
+
+  // Dark mode toggle
+  useEffect(()=>{
+    document.documentElement.setAttribute("data-theme",darkMode?"dark":"light");
+  },[darkMode]);
+
+  // Load data
+  useEffect(()=>{
+    (async()=>{
+      setLoading(true);
+      try{
+        const hRes=await fetch(`${API}/api/health`);
+        if(!hRes.ok) throw new Error("offline");
+        setConnected(true);
+        const dRes=await fetch(`${API}/api/dashboard`);
+        const d=await dRes.json();
+        setDashData(d);
+        const list=d.emails||[];
+        setEmails(list);
+        if(list.length>0) setSelected(list[0]);
+        setConversations(d.conversations||[]);
+        setStats(d.stats||{});
+        setBriefing(d.daily_summary||{});
+        const pRes=await fetch(`${API}/api/preferences`);
+        setPrefs(await pRes.json());
+      }catch{setConnected(false)}
+      setLoading(false);
+    })();
+  },[]);
+
+  const refreshInbox=async()=>{
+    try{
+      const r=await fetch(`${API}/api/dashboard`);
+      const d=await r.json();
+      const list=d.emails||[];
+      setEmails(list);setStats(d.stats||{});setConversations(d.conversations||[]);setBriefing(d.daily_summary||{});
+      setSelected(prev=>{
+        if(!prev) return list[0]||null;
+        return list.find(e=>(e.id&&prev.id&&e.id===prev.id)||(e.subject===prev.subject))||list[0]||null;
+      });
+      showToast("✓ Inbox refreshed");
+    }catch(e){showToast("Refresh error: "+e.message)}
+  };
+
+  const handleAnalyzeResult=newEmail=>{
+    setEmails(prev=>[newEmail,...prev.filter(e=>e.id!==newEmail.id)]);
+    setSelected(newEmail);setView("inbox");
+    showToast("✓ Email analyzed & opened!");
+  };
+
+  const generateReplyDraft=(email,mode="reply")=>{
+    if(mode==="forward") return "";
+    const senderName=(email.sender||"there").split("@")[0].replace(/[._]/g," ");
+    const capSender=senderName.charAt(0).toUpperCase()+senderName.slice(1);
+    const brief=email.executive_brief||{};
+    const actions=(email.action_items||[]).filter(a=>a&&(a.action||typeof a==="string"));
+
+    let bodyText="";
+    if(brief.next_steps){
+      bodyText=`Regarding the next steps (${brief.next_steps}), I am currently on it and will keep you posted with updates.`;
+    }else if(actions.length>0){
+      const firstTask=actions[0].action||(typeof actions[0]==="string"?actions[0]:"");
+      bodyText=`I have noted the task: "${firstTask}". I will ensure it is handled promptly.`;
+    }else if(brief.key_decision){
+      bodyText=`Acknowledged regarding: "${brief.key_decision}". We are fully aligned on this approach.`;
+    }else if(brief.tldr){
+      bodyText=`Thank you for the update on: "${brief.tldr}". I have reviewed the details and will proceed accordingly.`;
+    }else{
+      bodyText=`Thank you for reaching out. I have reviewed your email and will follow up with you shortly.`;
     }
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
+    return `Hi ${capSender},\n\n${bodyText}\n\nPlease let me know if you need any additional information.\n\nBest regards,\nMe`;
+  };
+
+  const handleReply=(email,mode="reply")=>{
+    const smartDraft=generateReplyDraft(email,mode);
+    const quotedHeader=mode==="reply"
+      ?`\n\n---\nOn ${email.timestamp}, ${email.sender} wrote:\n${email.body}`
+      :`\n\n---\nForwarded from ${email.sender}:\n${email.body}`;
+
+    setComposePreFill({
+      to:email.sender,
+      subject:(mode==="reply"?"Re: ":"Fwd: ")+(email.subject||""),
+      body:smartDraft ? (smartDraft + quotedHeader) : quotedHeader,
+      draft_only:smartDraft,
+      quoted_only:quotedHeader,
+      recipient_name:email.sender.split("@")[0],
+      topic_keywords:email.subject
+    });
+    setCompose(true);
+  };
+
+  const savePrefs=async(newPrefs)=>{
+    try{
+      const r=await fetch(`${API}/api/preferences`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(newPrefs)});
+      setPrefs(await r.json());showToast("✓ Preferences saved");
+    }catch(e){showToast("Error: "+e.message)}
+  };
+
+  // Filtering
+  const filteredEmails=useMemo(()=>emails.filter(e=>{
+    const prio=e.urgency?.priority||"LOW";
+    const cat=e.category?.category||"GENERAL";
+    if(filterPrio!=="ALL"&&prio!==filterPrio) return false;
+    if(filterCat!=="ALL"&&cat!==filterCat) return false;
+    if(view==="urgent") return ["CRITICAL","HIGH"].includes(prio);
+    if(view==="spam") return cat==="SPAM";
+    if(view==="critical") return prio==="CRITICAL";
+    if(search){const q=search.toLowerCase();return(e.subject||"").toLowerCase().includes(q)||(e.sender||"").toLowerCase().includes(q)||(e.body||"").toLowerCase().includes(q)}
+    return true;
+  }),[emails,filterPrio,filterCat,view,search]);
+
+  // Keyboard navigation
+  useEffect(()=>{
+    const handler=e=>{
+      if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA") return;
+      if(e.key==="/"||e.key==="c"||e.key==="C"||e.key==="j"||e.key==="k") e.preventDefault();
+      if(e.key==="/"){searchRef.current?.focus()}
+      if(e.key==="c"||e.key==="C"){setComposePreFill(null);setCompose(true)}
+      if(e.key==="j"||e.key==="k"){
+        const idx=filteredEmails.findIndex(em=>em.id===selected?.id);
+        const next=e.key==="j"?Math.min(idx+1,filteredEmails.length-1):Math.max(idx-1,0);
+        if(filteredEmails[next]) setSelected(filteredEmails[next]);
+      }
+    };
+    window.addEventListener("keydown",handler);
+    return()=>window.removeEventListener("keydown",handler);
+  },[filteredEmails,selected]);
+
+  const unreadCount=emails.filter(e=>e.unread!==false&&!e._read).length;
+  const criticalCount=emails.filter(e=>e.urgency?.priority==="CRITICAL").length;
+  const spamCount=emails.filter(e=>e.category?.category==="SPAM").length;
+
+  const navItems=[
+    {id:"dashboard",icon:"📊",label:"Dashboard",badge:0},
+    {id:"inbox",icon:"📥",label:"Inbox",badge:unreadCount},
+    {id:"urgent",icon:"⚡",label:"Urgent",badge:emails.filter(e=>["CRITICAL","HIGH"].includes(e.urgency?.priority)).length},
+    {id:"critical",icon:"🚨",label:"Critical",badge:criticalCount},
+    {id:"spam",icon:"🚫",label:"Spam",badge:spamCount},
+    {id:"conversations",icon:"💬",label:"Conversations",badge:conversations.length},
+    {id:"briefing",icon:"📋",label:"Daily Briefing",badge:0},
+    {id:"analytics",icon:"📈",label:"Model Analytics",badge:0},
+    {id:"preferences",icon:"⚙️",label:"Preferences",badge:0},
+  ];
+
+  const catItems=[
+    {cat:"OPERATIONS",icon:"⚡",label:"Operations"},
+    {cat:"ACTION_REQUIRED",icon:"✅",label:"Action Required"},
+    {cat:"MEETING",icon:"📅",label:"Meetings"},
+    {cat:"FINANCE",icon:"💰",label:"Finance"},
+    {cat:"EXTERNAL",icon:"🌐",label:"Client / External"},
+    {cat:"NEWSLETTER",icon:"📰",label:"Newsletters"},
+  ];
+
+  const isInboxView=!["dashboard","briefing","conversations","preferences","analytics"].includes(view);
+
+  return (
+    <>
+    {toast&&<Toast msg={toast} onDone={()=>setToast(null)}/>}
+
+    {/* TOP BAR */}
+    <div className="topbar">
+      <div className="logo">
+        <div className="logo-mark">📧</div>
+        <span className="logo-name">MailMind</span>
+        <span className="logo-ai">AI</span>
+      </div>
+      <div className="search-wrap">
+        <span className="search-icon">🔍</span>
+        <input ref={searchRef} className="search-input" value={search} onChange={e=>setSearch(e.target.value)}
+          placeholder="Search emails…" onFocus={()=>setView("inbox")}/>
+        <span className="search-kbd"><kbd>/</kbd></span>
+      </div>
+      <div className="topbar-right">
+        {connected===false&&<span className="status-pill status-offline"><span className="pulse-dot"/>Offline</span>}
+        {connected===true&&<span className="status-pill status-online"><span className="pulse-dot"/>AI Ready</span>}
+        <button className="icon-btn" title="Analyze Email" onClick={()=>setShowAnalyze(true)}>🔍</button>
+        <button className="icon-btn" title="Refresh" onClick={refreshInbox}>🔄</button>
+        <button className="icon-btn theme-toggle" title="Toggle Dark Mode" onClick={()=>setDarkMode(d=>!d)}>{darkMode?"☀️":"🌙"}</button>
+        <div className="avatar">ME</div>
+      </div>
+    </div>
+
+    {/* BODY */}
+    <div className="body-wrap">
+      {/* SIDEBAR */}
+      <div className="sidebar">
+        <button className="compose-btn" onClick={()=>{setComposePreFill(null);setCompose(true)}}>
+          <span className="c-icon">✏️</span> Compose
+        </button>
+        <div className="nav-label">Mail</div>
+        <div>
+          {navItems.map(item=>(
+            <div key={item.id} className={`nav-item ${view===item.id?"active":""}`} onClick={()=>setView(item.id)}>
+              <span className="ni">{item.icon}</span>
+              {item.label}
+              {item.badge>0&&<span className="nav-badge">{item.badge}</span>}
+            </div>
+          ))}
+        </div>
+        <div className="nav-divider"/>
+        <div className="nav-label">Categories</div>
+        {catItems.map(({cat,icon,label})=>(
+          <div key={cat} className={`nav-item ${filterCat===cat?"active":""}`}
+            onClick={()=>{setFilterCat(filterCat===cat?"ALL":cat);setView("inbox")}}>
+            <span className="ni">{icon}</span>{label}
+          </div>
+        ))}
+        <div className="nav-divider"/>
+        <div className="sidebar-footer">
+          <div style={{fontSize:11,color:"var(--txt-muted)",lineHeight:1.6}}>
+            <div style={{fontWeight:600,marginBottom:4}}>⌨️ Keyboard shortcuts</div>
+            <div><kbd>/</kbd> Search · <kbd>C</kbd> Compose</div>
+            <div><kbd>J</kbd>/<kbd>K</kbd> Navigate emails</div>
+          </div>
+        </div>
+      </div>
+
+      {/* MAIN AREA */}
+      {loading
+        ?<div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:16,color:"var(--txt-muted)"}}>
+          <div style={{fontSize:48}}>📧</div>
+          <div style={{fontSize:16,fontWeight:600}}>Loading your emails…</div>
+          <div className="skeleton" style={{width:220,height:5}}/>
+        </div>
+
+        :view==="dashboard"||view==="briefing"
+          ?<DashboardView stats={stats} briefing={briefing}/>
+
+        :view==="conversations"
+          ?<ConversationsView conversations={conversations}/>
+
+        :view==="analytics"
+          ?<AnalyticsView/>
+
+        :view==="preferences"
+          ?<PreferencesView prefs={prefs} onSave={savePrefs}/>
+
+        /* EMAIL LIST + READING PANE */
+        :<>
+          <div className="email-list">
+            <div className="list-header">
+              <span className="list-title">
+                {view==="urgent"?"⚡ Urgent":view==="critical"?"🚨 Critical":view==="spam"?"🚫 Spam":"📥 Inbox"}
+              </span>
+              <span className="count-badge">{filteredEmails.length}</span>
+              <button className="icon-btn" onClick={refreshInbox} title="Refresh" style={{marginLeft:"auto",width:30,height:30,fontSize:14}}>🔄</button>
+            </div>
+            <div className="filter-tabs">
+              {priorityFilters.map(p=>(
+                <button key={p} className={`filter-tab ${filterPrio===p?"active":""}`} onClick={()=>setFilterPrio(p)}>
+                  {p==="ALL"?"All":p==="CRITICAL"?"🔴 Critical":p==="HIGH"?"🟠 High":p==="MEDIUM"?"🔵 Medium":"🟢 Low"}
+                </button>
+              ))}
+            </div>
+            <div className="email-items">
+              {filteredEmails.length===0
+                ?<div style={{padding:40,textAlign:"center",color:"var(--txt-muted)",fontSize:14}}>No emails match your filter.</div>
+                :filteredEmails.map((email,i)=>{
+                  const isSel=Boolean(selected&&((selected.id&&email.id&&selected.id===email.id)||(selected.subject===email.subject&&selected.timestamp===email.timestamp)||selected===email));
+                  return <EmailRow key={email.id||i} email={email} selected={isSel} onClick={()=>setSelected(email)}/>;
+                })}
+            </div>
+          </div>
+          <ReadingPane
+            key={selected?(selected.id||(selected.subject+selected.timestamp)):"empty"}
+            email={selected}
+            onReply={handleReply}
+          />
+        </>
+      }
+    </div>
+
+    {/* MODALS */}
+    <ComposeModal open={compose} onClose={()=>{setCompose(false);setComposePreFill(null)}} prefill={composePreFill}
+      onSentSuccess={()=>{showToast("✓ Email opened in Gmail!");refreshInbox()}}/>
+    {showAnalyze&&<AnalyzeModal onClose={()=>setShowAnalyze(false)} onResult={handleAnalyzeResult}/>}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("app")).render(<App/>);
+</script>
 </body>
 </html>

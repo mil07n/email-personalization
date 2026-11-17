@@ -22,5 +22,11 @@
   ],
   "min_urgency_to_highlight": "MEDIUM",
   "summary_format": "executive_briefing",
-  "max_summary_items": 10
+  "max_summary_items": 10,
+  "smtp_settings": {
+    "email": "tejainumula05@gmail.com",
+    "app_password": "Teja@1588",
+    "host": "smtp.gmail.com",
+    "port": 587
+  }
 }

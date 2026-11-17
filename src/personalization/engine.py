@@ -178,10 +178,20 @@ class PersonalizationEngine:
                     "sender": e.get("sender")
                 })
             for dl in e.get("deadlines", []):
+                task_name = dl.get("task")
+                if not task_name:
+                    for act in e.get("action_items", []):
+                        if dl.get("raw") and dl.get("raw").lower() in (act.get("deadline", "") + " " + act.get("source_sentence", "")).lower():
+                            task_name = act.get("action")
+                            break
+                    if not task_name and e.get("action_items"):
+                        task_name = e.get("action_items")[0].get("action")
+
                 all_deadlines.append({
                     "deadline": dl.get("raw"),
                     "normalized": dl.get("normalized"),
-                    "email_subject": e.get("subject")
+                    "email_subject": e.get("subject"),
+                    "task": task_name
                 })
 
         # Top urgent / high priority emails
@@ -235,7 +245,8 @@ class PersonalizationEngine:
         if all_deadlines:
             md_lines.append("## ⏰ Upcoming Deadlines")
             for dl in all_deadlines[:5]:
-                md_lines.append(f"- ⏳ **{dl['deadline']}** (Normalized: `{dl['normalized']}`) — *{dl['email_subject'][:40]}…*")
+                task_str = f" → **Task to complete:** {dl['task']}" if dl.get('task') else ""
+                md_lines.append(f"- ⏳ **{dl['deadline']}**{task_str} (Normalized: `{dl['normalized']}`) — *{dl['email_subject'][:40]}…*")
             md_lines.append("")
 
         briefing_text = "\n".join(md_lines)
@@ -247,6 +258,7 @@ class PersonalizationEngine:
             "top_urgent_emails": top_urgent,
             "pending_action_items": all_actions,
             "upcoming_deadlines": all_deadlines,
+            "top_upcoming_deadlines": all_deadlines,
             "conversation_summaries": conv_summaries,
             "briefing_markdown": briefing_text
         }

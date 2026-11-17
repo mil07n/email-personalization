@@ -17,6 +17,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
 from sklearn.calibration import CalibratedClassifierCV
+from sklearn.ensemble import VotingClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score,
@@ -45,11 +46,16 @@ def train_urgency_models():
     df = pd.read_csv(CUSTOMER_CARE_CSV)
     print(f"Loaded {len(df)} records.")
 
-    # 2. Preprocess text
+    # 2. Preprocess text with subject weighting (subjects contain dense urgency signals)
     preprocessor = EmailPreprocessor()
     df["clean_body"] = df["message_body"].fillna("").map(preprocessor.clean_for_nlp)
     df["clean_subject"] = df["subject"].fillna("").map(preprocessor.clean_for_nlp)
-    df["text"] = df["clean_subject"] + " " + df["clean_body"]
+    df["text"] = (
+        df["clean_subject"] + " " +
+        df["clean_subject"] + " " +
+        df["clean_subject"] + " " +
+        df["clean_body"]
+    )
 
     # Target: email_criticality (standardized to lowercase: high, medium, low)
     df["label"] = df["email_criticality"].fillna("medium").str.lower().str.strip()
@@ -69,20 +75,29 @@ def train_urgency_models():
     )
     print(f"\nTrain size: {len(X_train)} | Test size: {len(X_test)}")
 
-    # 4. Feature Extraction: TF-IDF
+    # 4. Feature Extraction: TF-IDF with Unigrams, Bigrams and Trigrams
     vectorizer = TfidfVectorizer(
-        max_features=5000,
-        ngram_range=(1, 2),
+        max_features=10000,
+        ngram_range=(1, 3),
         stop_words="english",
         sublinear_tf=True
     )
     X_train_vec = vectorizer.fit_transform(X_train)
     X_test_vec = vectorizer.transform(X_test)
 
-    # 5. Model Candidates
+    # 5. Model Candidates with Tuned Hyperparameters & Soft-Voting Ensemble
+    cal_svc = CalibratedClassifierCV(LinearSVC(random_state=42, C=1.5, dual=False, max_iter=3000), cv=5)
+    log_reg = LogisticRegression(max_iter=1000, C=2.5, random_state=42)
+    ensemble = VotingClassifier(
+        estimators=[("svc", cal_svc), ("lr", log_reg)],
+        voting="soft",
+        weights=[2, 1]
+    )
+
     candidates = {
-        "LogisticRegression": LogisticRegression(max_iter=1000, C=1.0, random_state=42),
-        "LinearSVC": CalibratedClassifierCV(LinearSVC(random_state=42, dual=False, max_iter=2000)),
+        "Ensemble (LinearSVC + LogReg)": ensemble,
+        "LinearSVC": CalibratedClassifierCV(LinearSVC(random_state=42, C=1.5, dual=False, max_iter=3000)),
+        "LogisticRegression": LogisticRegression(max_iter=1000, C=2.0, random_state=42),
         "MultinomialNB": MultinomialNB(alpha=0.5)
     }
 
